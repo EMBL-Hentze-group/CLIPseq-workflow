@@ -17,19 +17,16 @@ process CUTADAPT {
     script:
     def json = "${sample}_${stage}_report.json"
     if (paired) {
-        // run_cutadapt_paired(fastqs, sample)
         def mate1 = fastqs[0]
         def mate2 = fastqs[1]
         def R1 ="${sample}_${stage}_R1.fq.gz"
         def R2 ="${sample}_${stage}_R2.fq.gz"
         """
-        echo "Paired-end reads detected. ${mate1}, ${mate2}, ${R1}, ${R2}"
         cutadapt -j ${task.cpus} ${cut_params} -o ${R1} -p ${R2} --report full --json ${json} ${mate1} ${mate2}
         """
     } else {
         def out ="${sample}_${stage}_fq.gz"
         """
-        echo "single reads detected. ${fastqs}, ${out}"
         cutadapt -j ${task.cpus}  ${cut_params} -o ${out} --report full --json ${json} ${fastqs}
         """
     }
