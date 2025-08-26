@@ -1,11 +1,17 @@
 include {samplesheetToList} from 'plugin/nf-schema'
 // QCs
 include {QC as QC_RAW} from './workflow/qc.nf'
-include {QC as QC_TRIM1} from './workflow/qc.nf'
-include {QC as QC_TRIM2} from './workflow/qc.nf'
+include {QC as QC_CA_TRIM1} from './workflow/qc.nf'
+include {QC as QC_CA_TRIM2} from './workflow/qc.nf'
+include {QC as QC_FP_TRIM1} from './workflow/qc.nf'
+include {QC as QC_FP_TRIM2} from './workflow/qc.nf'
 // Trims
+// // cutadapt
 include {CUTADAPT as CUTADAPT_TRIM1} from './modules/cutadapt.nf'
 include {CUTADAPT as CUTADAPT_TRIM2} from './modules/cutadapt.nf'
+// // fastp
+include {FASTP as FASTP_TRIM1} from './modules/fastp.nf'
+include {FASTP as FASTP_TRIM2} from './modules/fastp.nf'
 // Sourmash
 include {SOURMASH as SOURMASH_RAW} from './workflow/sourmash.nf'
 include {SOURMASH as SOURMASH_TRIM1} from './workflow/sourmash.nf'
@@ -46,13 +52,20 @@ workflow{
                         return [ sample, true, [fastq_1, fastq_2]]
                     }
             }
-        // TRIM
+        // TRIM using cutadapt
         ch_trim1 = CUTADAPT_TRIM1(ch_data,"trim1", params.cutadapt.trim1) // first trim
         ch_trim2 = CUTADAPT_TRIM2(ch_trim1.trimmed,"trim2", params.cutadapt.trim2) // second trim
-        // QC
+        // TRIM using fastp
+        ch_fp_trim1 = FASTP_TRIM1(ch_data,"trim1", params.fastp.trim1)
+        ch_fp_trim2 = FASTP_TRIM2(ch_fp_trim1.trimmed,"trim1", params.fastp.trim2)
+        // QC Raw
         ch_raw_qc = QC_RAW(ch_data, "raw") // raw
-        ch_trim1_qc = QC_TRIM1(ch_trim1.trimmed, "trim1") // trim1 qc
-        ch_trim2_qc = QC_TRIM2(ch_trim2.trimmed, "trim2") // trim2 qc
+        // QC for cutadapt trims
+        ch_trim1_qc = QC_CA_TRIM1(ch_trim1.trimmed, "trim1") // trim1 cutadapt qc
+        ch_trim2_qc = QC_CA_TRIM2(ch_trim2.trimmed, "trim2") // trim2 cutadatp qc
+        // QC for fastp trims
+        ch_fp_trim1_qc = QC_FP_TRIM1(ch_fp_trim1.trimmed, "trim1") // trim1 fastp qc
+        ch_fp_trim2_qc = QC_FP_TRIM2(ch_fp_trim2.trimmed, "trim2") // trim2 fastp qc
         //SOURMASH
         ch_raw_sourmash = SOURMASH_RAW(ch_data, "raw", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on raw
         ch_trim1_sourmash = SOURMASH_TRIM1(ch_trim1.trimmed, "trim1", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim1
