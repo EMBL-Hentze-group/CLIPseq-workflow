@@ -1,3 +1,6 @@
 .nextflow*
 trace-*
+dag-*.html
+report-*.html
+timeline-*.html
 work/
