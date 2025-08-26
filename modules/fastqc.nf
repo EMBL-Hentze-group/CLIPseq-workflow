@@ -1,4 +1,5 @@
 process FASTQC {
+    label "process_low"
     tag "$sample"
     
     input:
@@ -14,6 +15,6 @@ process FASTQC {
     script:
     """
     mkdir -p ${sample}_${stage} && \
-    fastqc $fastqs --outdir ${sample}_${stage}
+    fastqc -t ${task.cpus} $fastqs --outdir ${sample}_${stage}
     """
 }

@@ -1,4 +1,5 @@
 process MULTIQC{
+    label "process_single"
     tag "$stage"
     
     input:

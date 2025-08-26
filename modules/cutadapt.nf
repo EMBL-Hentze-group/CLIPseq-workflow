@@ -1,5 +1,6 @@
 
 process CUTADAPT {
+    label "process_low"
     tag "$sample $stage"
 
     input:
@@ -23,13 +24,13 @@ process CUTADAPT {
         def R2 ="${sample}_${stage}_R2.fq.gz"
         """
         echo "Paired-end reads detected. ${mate1}, ${mate2}, ${R1}, ${R2}"
-        cutadapt  ${cut_params} -o ${R1} -p ${R2} --report full --json ${json} ${mate1} ${mate2}
+        cutadapt -j ${task.cpus} ${cut_params} -o ${R1} -p ${R2} --report full --json ${json} ${mate1} ${mate2}
         """
     } else {
         def out ="${sample}_${stage}_fq.gz"
         """
         echo "single reads detected. ${fastqs}, ${out}"
-        cutadapt  ${cut_params} -o ${out} --report full --json ${json} ${fastqs}
+        cutadapt -j ${task.cpus}  ${cut_params} -o ${out} --report full --json ${json} ${fastqs}
         """
     }
 }
