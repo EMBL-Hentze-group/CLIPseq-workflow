@@ -1,4 +1,5 @@
 process SKETCH {
+    label "process_medium"
     tag "$sample $stage"
 
     input:
@@ -25,6 +26,6 @@ process SKETCH {
         """
     }
     """
-    sourmash sketch dna -p ${sketch_params} --name ${sample} -o ${out} ${fastqs}
+    sourmash sketch dna -f -p ${sketch_params} --name ${sample} -o ${out} ${fastqs}
     """
 }

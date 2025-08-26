@@ -1,4 +1,5 @@
 process COMPARE{
+    label "process_low"
     tag "$stage"
 
     input:
@@ -14,6 +15,6 @@ process COMPARE{
     script:
     def out = "${stage}_${K}compare.npy"
     """
-    sourmash compare -k ${K} -o ${out} ${sig}
+    sourmash compare -f -p ${task.cpus} -k ${K} -o ${out} ${sig}
     """
 }

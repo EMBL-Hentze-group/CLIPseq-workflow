@@ -1,4 +1,5 @@
 process SOURMASH_PLOT {
+    label "process_single"
     tag "$stage"
 
     input:
@@ -15,7 +16,7 @@ process SOURMASH_PLOT {
     def outdir = "${stage}_${K}"
     """
     mkdir -p ${outdir} &&
-    sourmash plot --pdf --output-dir ${outdir} --labeltext ${labels} ${npy} &&
+    sourmash plot -f --pdf --output-dir ${outdir} --labeltext ${labels} ${npy} &&
     mv ${outdir}/*.matrix.pdf ${npy}.matrix.pdf
     """
 }
