@@ -7,22 +7,24 @@ include {QC as QC_FP_TRIM1} from './workflow/qc.nf'
 include {QC as QC_FP_TRIM2} from './workflow/qc.nf'
 // Trims
 // // cutadapt
-include {CUTADAPT as CUTADAPT_TRIM1} from './modules/cutadapt.nf'
-include {CUTADAPT as CUTADAPT_TRIM2} from './modules/cutadapt.nf'
+include {CUTADAPT as CUTADAPT_TRIM1} from './workflow/cutadapt.nf'
+include {CUTADAPT as CUTADAPT_TRIM2} from './workflow/cutadapt.nf'
 // // fastp
-include {FASTP as FASTP_TRIM1} from './modules/fastp.nf'
-include {FASTP as FASTP_TRIM2} from './modules/fastp.nf'
+include {FASTP as FASTP_TRIM1} from './workflow/fastp.nf'
+include {FASTP as FASTP_TRIM2} from './workflow/fastp.nf'
 // Sourmash
 include {SOURMASH as SOURMASH_RAW} from './workflow/sourmash.nf'
-include {SOURMASH as SOURMASH_TRIM1} from './workflow/sourmash.nf'
-include {SOURMASH as SOURMASH_TRIM2} from './workflow/sourmash.nf'    
+include {SOURMASH as SOURMASH_TRIM1_CA} from './workflow/sourmash.nf'
+include {SOURMASH as SOURMASH_TRIM2_CA} from './workflow/sourmash.nf'
+include {SOURMASH as SOURMASH_TRIM1_FP} from './workflow/sourmash.nf'
+include {SOURMASH as SOURMASH_TRIM2_FP} from './workflow/sourmash.nf'    
 
 // for output
 nextflow.preview.output = true
   
 // collect qc outputs
 def collect_qc_outputs = { qc_channel ->
-    qc_channel.zip.concat( qc_channel.html, qc_channel.report)
+    qc_channel.zip.concat( qc_channel.html, qc_channel.multiqc)
     .collect()
     .flatten()
 }
@@ -39,7 +41,7 @@ def collect_sourmash_outputs = { sourmash_channel ->
     .collect()
 }
 
-workflow{
+workflow {
     main:
         ch_data = Channel
             .fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
@@ -52,37 +54,40 @@ workflow{
                         return [ sample, true, [fastq_1, fastq_2]]
                     }
             }
-        // TRIM using cutadapt
-        ch_trim1 = CUTADAPT_TRIM1(ch_data,"trim1", params.cutadapt.trim1) // first trim
-        ch_trim2 = CUTADAPT_TRIM2(ch_trim1.trimmed,"trim2", params.cutadapt.trim2) // second trim
-        // TRIM using fastp
-        ch_fp_trim1 = FASTP_TRIM1(ch_data,"trim1", params.fastp.trim1)
-        ch_fp_trim2 = FASTP_TRIM2(ch_fp_trim1.trimmed,"trim1", params.fastp.trim2)
         // QC Raw
         ch_raw_qc = QC_RAW(ch_data, "raw") // raw
-        // QC for cutadapt trims
-        ch_trim1_qc = QC_CA_TRIM1(ch_trim1.trimmed, "trim1") // trim1 cutadapt qc
-        ch_trim2_qc = QC_CA_TRIM2(ch_trim2.trimmed, "trim2") // trim2 cutadatp qc
-        // QC for fastp trims
-        ch_fp_trim1_qc = QC_FP_TRIM1(ch_fp_trim1.trimmed, "trim1") // trim1 fastp qc
-        ch_fp_trim2_qc = QC_FP_TRIM2(ch_fp_trim2.trimmed, "trim2") // trim2 fastp qc
+        // trim using cutadapt and QC
+        ch_ca_trim1 = CUTADAPT_TRIM1(ch_data,"trim1", params.cutadapt.trim1) // first trim
+        ch_ca_trim2 = CUTADAPT_TRIM2(ch_ca_trim1.trimmed,"trim2", params.cutadapt.trim2) // second trim
+        // trim using cutadapt and QC
+        ch_fp_trim1 = FASTP_TRIM1(ch_data,"trim1", params.fastp.trim1)
+        ch_fp_trim2 = FASTP_TRIM2(ch_fp_trim1.trimmed,"trim2", params.fastp.trim2)
+        
         //SOURMASH
         ch_raw_sourmash = SOURMASH_RAW(ch_data, "raw", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on raw
-        ch_trim1_sourmash = SOURMASH_TRIM1(ch_trim1.trimmed, "trim1", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim1
-        ch_trim2_sourmash = SOURMASH_TRIM2(ch_trim2.trimmed, "trim2", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim2
+        ch_trim1_ca_sourmash = SOURMASH_TRIM1_CA(ch_ca_trim1.trimmed, "trim1", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim1
+        ch_trim2_ca_sourmash = SOURMASH_TRIM2_CA(ch_ca_trim2.trimmed, "trim2", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim2
+        ch_trim1_fp_sourmash = SOURMASH_TRIM1_FP(ch_fp_trim1.trimmed, "trim1", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim1
+        ch_trim2_fp_sourmash = SOURMASH_TRIM2_FP(ch_fp_trim2.trimmed, "trim2", params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // sourmash on trim2
 
     publish:
         //QC outputs
         raw_qc = collect_qc_outputs(ch_raw_qc)
-        trim1_qc = collect_qc_outputs(ch_trim1_qc)
-        trim2_qc = collect_qc_outputs(ch_trim2_qc)
+        trim1_ca_qc = collect_qc_outputs(ch_ca_trim1)
+        trim2_ca_qc = collect_qc_outputs(ch_ca_trim2)
+        trim1_fp_qc = collect_qc_outputs(ch_fp_trim1)
+        trim2_fp_qc = collect_qc_outputs(ch_fp_trim2)
         // trim outputs
-        trim1 = collect_trim_outputs(ch_trim1)
-        trim2 = collect_trim_outputs(ch_trim2)
+        trim1_ca = collect_trim_outputs(ch_ca_trim1)
+        trim2_ca = collect_trim_outputs(ch_ca_trim2)
+        trim1_fp = collect_trim_outputs(ch_fp_trim1)
+        trim2_fp = collect_trim_outputs(ch_fp_trim2)
         //SOURMASH outputs
         sourmash_raw = collect_sourmash_outputs(ch_raw_sourmash)
-        sourmash_trim1 = collect_sourmash_outputs(ch_trim1_sourmash)
-        sourmash_trim2 = collect_sourmash_outputs(ch_trim2_sourmash)    
+        sourmash_trim1_ca = collect_sourmash_outputs(ch_trim1_ca_sourmash)
+        sourmash_trim2_ca = collect_sourmash_outputs(ch_trim2_ca_sourmash)
+        sourmash_trim1_fp = collect_sourmash_outputs(ch_trim1_fp_sourmash)
+        sourmash_trim2_fp = collect_sourmash_outputs(ch_trim2_fp_sourmash)  
 }
 
 output{
@@ -90,32 +95,56 @@ output{
         path "QC"
         mode params.mode
     }
-    trim1_qc {
-        path "QC"
+    trim1_ca_qc {
+        path "QC/cutadapt"
         mode params.mode
     }
-    trim2_qc {
-        path "QC"
+    trim2_ca_qc {
+        path "QC/cutadapt"
         mode params.mode
     }
-    trim1 {
-        path "trim"
+    trim1_ca {
+        path "trim/cutadapt"
         mode params.mode
     }
-    trim2 {
-        path "trim"
+    trim2_ca {
+        path "trim/cutadapt"
+        mode params.mode
+    }
+    trim1_fp_qc {
+        path "QC/fastp"
+        mode params.mode
+    }
+    trim2_fp_qc {
+        path "QC/fastp"
+        mode params.mode
+    }
+    trim1_fp {
+        path "trim/fastp"
+        mode params.mode
+    }
+    trim2_fp {
+        path "trim/fastp"
         mode params.mode
     }
     sourmash_raw {
         path "sourmash"
         mode params.mode
     }
-    sourmash_trim1 {
-        path "sourmash"
+    sourmash_trim1_ca {
+        path "sourmash/cutadapt"
         mode params.mode
     }
-    sourmash_trim2 {
-        path "sourmash"
+    sourmash_trim2_ca {
+        path "sourmash/cutadapt"
+        mode params.mode
+    }
+    sourmash_trim1_fp {
+        path "sourmash/fastp"
+        mode params.mode
+    }
+    sourmash_trim2_fp {
+        path "sourmash/fastp"
         mode params.mode
     }
 }
