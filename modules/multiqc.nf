@@ -7,7 +7,7 @@ process MULTIQC{
         val stage
 
     output:
-        path "${stage}_multiqc_report.html", emit: report
+        path "${stage}_multiqc_report.html", emit: multiqc
     
     container params.singularity.qc
 

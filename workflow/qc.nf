@@ -12,5 +12,5 @@ workflow QC{
     emit:
         zip = fqcs.zip
         html = fqcs.html
-        report = mqc.report
+        multiqc = mqc.multiqc
 }
