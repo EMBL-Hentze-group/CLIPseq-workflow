@@ -3,31 +3,22 @@ process CUTADAPT {
     label "process_low"
     tag "$sample $stage"
 
+    container params.singularity.trim
+
     input:
-    tuple val(sample), val(paired), path(fastqs)
-    val stage
-    val cut_params
+        tuple val(sample), val(paired), path(fastqs)
+        val stage
+        val cut_params
 
     output:
-    tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
-    tuple val(sample), val(paired), path("${sample}_${stage}_report.json"), emit: report
-
-    container params.singularity.trim
+        tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
+        tuple val(sample), val(paired), path("${sample}_${stage}_report.json"), emit: report
 
     script:
     def json = "${sample}_${stage}_report.json"
-    if (paired) {
-        def mate1 = fastqs[0]
-        def mate2 = fastqs[1]
-        def R1 ="${sample}_${stage}_R1.fq.gz"
-        def R2 ="${sample}_${stage}_R2.fq.gz"
-        """
-        cutadapt -j ${task.cpus} ${cut_params} -o ${R1} -p ${R2} --report full --json ${json} ${mate1} ${mate2}
-        """
-    } else {
-        def out ="${sample}_${stage}_fq.gz"
-        """
-        cutadapt -j ${task.cpus}  ${cut_params} -o ${out} --report full --json ${json} ${fastqs}
-        """
-    }
+    def outputs = paired ? " -o ${sample}_${stage}_R1.fq.gz -p ${sample}_${stage}_R2.fq.gz" : " -o ${sample}_${stage}_fq.gz"
+    def inputs = paired ? "${fastqs[0]} ${fastqs[1]}" : "${fastqs}"
+    """
+    cutadapt -j ${task.cpus} ${cut_params} --report full --json ${json} ${outputs} ${inputs}
+    """
 }
