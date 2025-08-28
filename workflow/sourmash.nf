@@ -1,14 +1,14 @@
-include {SKETCH} from '../modules/sourmash_sketch.nf'
-include {COMPARE} from '../modules/sourmash_compare.nf'
-include {SOURMASH_PLOT} from '../modules/sourmash_plot.nf'
+include {SKETCH} from '../modules/sourmash.nf'
+include {COMPARE} from '../modules/sourmash.nf'
+include {SOURMASH_PLOT} from '../modules/sourmash.nf'
 
 workflow SOURMASH {
     take:
         ch_data
-        stage
         sketch_params
         abund
-        compare_K
+        compare_K,
+        stage
     main:
         signatures = SKETCH(ch_data, stage, sketch_params, abund)
         compare = COMPARE(signatures.sig.collect(), stage, compare_K)

@@ -5,8 +5,8 @@ process FASTP {
 
     input:
     tuple val(sample), val(paired), path(fastqs)
-    val stage
     val cut_params
+    val stage
 
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed

@@ -5,10 +5,10 @@ include {FASTP as FASTP_P} from '../modules/fastp.nf'
 workflow FASTP{
     take:
         ch_data
-        stage
         cut_params
+        stage
     main:
-        fastp = FASTP_P(ch_data, stage, cut_params)
+        fastp = FASTP_P(ch_data, cut_params, stage)
         fqcs = FASTQC(fastp.trimmed, stage)
         mqc = MULTIQC(fqcs.zip.collect(),stage)
     emit:

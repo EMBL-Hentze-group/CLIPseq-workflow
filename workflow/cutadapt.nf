@@ -5,10 +5,10 @@ include {CUTADAPT as CUTADAPT_P} from '../modules/cutadapt.nf'
 workflow CUTADAPT{
     take:
         ch_data
-        stage
         cut_params
+        stage
     main:
-        cutadapt = CUTADAPT_P(ch_data, stage, cut_params)
+        cutadapt = CUTADAPT_P(ch_data, cut_params, stage)
         fqcs = FASTQC(cutadapt.trimmed, stage)
         mqc = MULTIQC(fqcs.zip.collect(),stage)
     emit:
