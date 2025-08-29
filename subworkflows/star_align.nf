@@ -20,6 +20,8 @@ workflow STARALIGN2{
         ch_data
         genomeDir
         star_params
+        dedup
+        dedup_params
         stage
     main:
         ch_star = STARALIGN_P(ch_data, genomeDir, star_params, stage)
