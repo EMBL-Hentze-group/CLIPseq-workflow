@@ -1,5 +1,8 @@
-include {FASTQC} from '../modules/fastqc.nf'
-include {MULTIQC} from '../modules/multiqc.nf'
+include {
+    FASTQC
+    MULTIQC
+    } from '../modules/fastqc.nf'
+// include {MULTIQC} from '../modules/multiqc.nf'
 include {FASTP as FASTP_P} from '../modules/fastp.nf'
 
 workflow FASTP{
