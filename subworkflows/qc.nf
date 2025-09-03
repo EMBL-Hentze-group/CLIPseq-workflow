@@ -1,18 +1,17 @@
+include { fastqc } from '../modules/fastqc.nf'
+include { multiqc as multiqc_P } from '../modules/multiqc.nf'
 
-include {
-    FASTQC
-    MULTIQC
-    } from '../modules/fastqc.nf'
-
-workflow QC{
+workflow QC {
     take:
-        ch_data
-        stage
+    ch_data
+    stage
+
     main:
-        fqcs = FASTQC(ch_data, stage)
-        mqc = MULTIQC(fqcs.zip.collect(),stage)
+    fqcs = fastqc(ch_data, stage)
+    mqc = multiqc_P(fqcs.zip.collect(), stage)
+
     emit:
-        zip = fqcs.zip
-        html = fqcs.html
-        multiqc = mqc.multiqc
+    zip = fqcs.zip
+    html = fqcs.html
+    multiqc = mqc.multiqc
 }

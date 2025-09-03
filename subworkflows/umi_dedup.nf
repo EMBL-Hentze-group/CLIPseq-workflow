@@ -1,15 +1,17 @@
-include {DEDUP} from '../modules/umi_tools.nf'
-include {INDEX} from '../modules/samtools.nf'
+include { dedup } from '../modules/umi_tools.nf'
+include { index } from '../modules/samtools.nf'
 
-workflow UMI_DEDUP{
+workflow UMI_DEDUP {
     take:
-        ch_data
-        dedup_params
-        stage
+    ch_data
+    dedup_params
+    stage
+
     main:
-        ch_umi_dedup = DEDUP(ch_data, dedup_params, stage)
-        ch_index = INDEX(ch_umi_dedup.bam)
-        ch_bam = ch_umi_dedup.bam.join(ch_index.index, by: 0)
+    ch_umi_dedup = dedup(ch_data, dedup_params, stage)
+    ch_index = index(ch_umi_dedup.bam)
+    ch_bam = ch_umi_dedup.bam.join(ch_index.index, by: 0)
+
     emit:
-        bam = ch_bam
+    bam = ch_bam
 }
