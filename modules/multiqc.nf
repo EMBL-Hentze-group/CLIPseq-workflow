@@ -1,21 +1,19 @@
-process MULTIQC{
+process multiqc {
     label "process_single"
-    tag "$stage"
-    
+    tag "${stage}"
+
+    container params.singularity.qc
+
     input:
-        path(zip)
-        val stage
+    path zip
+    val stage
 
     output:
-        path "${stage}_multiqc_report.html", emit: multiqc
-    
-    container params.singularity.qc
+    path "${stage}_multiqc_report.html", emit: multiqc
 
     script:
     def zips = zip.flatten().join(' ')
     """
-    echo zips: ${zip}
     multiqc --force --filename ${stage}_multiqc_report.html ${zips}
     """
-    
 }

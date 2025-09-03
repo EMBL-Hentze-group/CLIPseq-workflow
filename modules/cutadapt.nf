@@ -1,18 +1,17 @@
-
-process CUTADAPT {
+process cutadapt {
     label "process_low"
-    tag "$sample $stage"
+    tag "${sample} ${stage}"
 
     container params.singularity.trim
 
     input:
-        tuple val(sample), val(paired), path(fastqs)
-        val cut_params
-        val stage
+    tuple val(sample), val(paired), path(fastqs)
+    val cut_params
+    val stage
 
     output:
-        tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
-        tuple val(sample), val(paired), path("${sample}_${stage}_report.json"), emit: report
+    tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
+    tuple val(sample), val(paired), path("${sample}_${stage}_report.json"), emit: report
 
     script:
     def json = "${sample}_${stage}_report.json"

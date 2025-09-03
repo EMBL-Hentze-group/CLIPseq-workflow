@@ -1,20 +1,20 @@
 // all sourmash processes
 // order of execution: SKETCH -> COMPARE -> PLOT
 
-process SKETCH {
+process sketch {
     label "process_low"
-    tag "$sample $stage"
+    tag "${sample} ${stage}"
 
     container params.singularity.sourmash
 
     input:
-        tuple val(sample), val(paired), path(fastqs)
-        val sketch_params
-        val abund
-        val stage
+    tuple val(sample), val(paired), path(fastqs)
+    val sketch_params
+    val abund
+    val stage
 
     output:
-        path("${sample}_${stage}.sig.zip"), emit: sig
+    path ("${sample}_${stage}.sig.zip"), emit: sig
 
     script:
     def out = "${sample}_${stage}.sig.zip"
@@ -24,19 +24,19 @@ process SKETCH {
     """
 }
 
-process COMPARE{
+process compare {
     label "process_low"
-    tag "$stage"
-
-    input:
-    path(sig)
-    val K
-    val stage
-    
-    output:
-    tuple path("${stage}_${K}compare.npy"), path("${stage}_${K}compare.npy.labels.txt"), emit: npy
+    tag "${stage}"
 
     container params.singularity.sourmash
+
+    input:
+    path sig
+    val K
+    val stage
+
+    output:
+    tuple path("${stage}_${K}compare.npy"), path("${stage}_${K}compare.npy.labels.txt"), emit: npy
 
     script:
     def out = "${stage}_${K}compare.npy"
@@ -45,9 +45,11 @@ process COMPARE{
     """
 }
 
-process SOURMASH_PLOT {
+process sourmashPlot {
     label "process_single"
-    tag "$stage"
+    tag "${stage}"
+
+    container params.singularity.sourmash
 
     input:
     tuple path(npy), path(labels)
@@ -55,9 +57,7 @@ process SOURMASH_PLOT {
     val stage
 
     output:
-    path("${npy}.matrix.pdf"), emit: pdf
-
-    container params.singularity.sourmash
+    path ("${npy}.matrix.pdf"), emit: pdf
 
     script:
     def outdir = "${stage}_${K}"

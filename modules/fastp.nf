@@ -1,7 +1,8 @@
-
-process FASTP {
+process fastp {
     label "process_low"
-    tag "$sample $stage"
+    tag "${sample} ${stage}"
+
+    container params.singularity.trim
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -11,8 +12,6 @@ process FASTP {
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
     tuple val(sample), val(paired), path("${sample}_${stage}_report.json"), emit: report
-
-    container params.singularity.trim
 
     script:
     def json = "${sample}_${stage}_report.json"
