@@ -5,7 +5,7 @@ process bedGraph{
     container params.singularity.genome_ops
 
     input:
-    tuple val(sample), path(sites)
+    tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
     path(genome)
     val(bed_params)
 
@@ -14,7 +14,7 @@ process bedGraph{
 
     script:
     """
-    bedtools genomecov -i ${sites} -g ${genome} ${bed_params} > ${sample}.bg &&
+    bedtools genomecov -i ${sites[0]} -g ${genome} ${bed_params} > ${sample}.bg &&
     bedSort ${sample}.bg ${sample}.bg
     """
 }
