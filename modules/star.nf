@@ -12,7 +12,7 @@ process starAlign {
 
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}.bam"), path("${sample}_${stage}.bam.bai"), emit: bam
-    path ("${sample}_${stage}Log.final.out"), emit: stats
+    path ("${sample}_${stage}Log*"), emit: stats
     path ("${sample}_${stage}SJ.out.tab"), emit: junctions
 
     script:
@@ -41,7 +41,7 @@ process starAlign2Pass {
 
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}.bam"), path("${sample}_${stage}.bam.bai"), emit: bam
-    path ("${sample}_${stage}Log.final.out"), emit: stats
+    path ("${sample}_${stage}Log*"), emit: stats
     path ("${sample}_${stage}SJ.out.tab"), emit: junctions
 
     script:
