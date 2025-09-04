@@ -1,5 +1,5 @@
 include {
-    bedGraph ;
+    bedGraph
     bigWig
 } from '../modules/tracks.nf'
 
