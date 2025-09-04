@@ -17,7 +17,7 @@ workflow COUNT {
 
     main:
     ch_bed = extract(bam, tabix, ignore_pcr_duplicates, primary, mate, site, offset, extract_params)
-    ch_count = count_P(ch_bed.bed, sliding_windows)
+    ch_count = count_P(ch_bed.sites, sliding_windows)
 
     emit:
     sites = ch_bed.sites
