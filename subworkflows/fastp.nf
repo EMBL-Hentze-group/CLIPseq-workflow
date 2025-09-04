@@ -21,10 +21,14 @@ workflow FASTP {
     emit:
     trimmed = fastp.trimmed
     report = fastp.report
-    zip = fqcs.zip
-    html = fqcs.html
-    multiqc = mqc.multiqc
-    signatures = sourmash.signatures
-    comparison = sourmash.comparison
-    plot = sourmash.plot
+    // sourmash
+    sourmash = sourmash.signatures|merge(sourmash.comparison)|merge(sourmash.plot)
+    // qc
+    qc = fqcs.zip|merge(fqcs.html)|merge(mqc.multiqc)
+    // zip = fqcs.zip
+    // html = fqcs.html
+    // multiqc = mqc.multiqc
+    // signatures = sourmash.signatures
+    // comparison = sourmash.comparison
+    // plot = sourmash.plot
 }
