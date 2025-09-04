@@ -11,7 +11,7 @@ process cutadapt {
 
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
-    tuple val(sample), val(paired), path("${sample}_${stage}_report.json"), emit: report
+    path("${sample}_${stage}_report.json"), emit: report
 
     script:
     def json = "${sample}_${stage}_report.json"
