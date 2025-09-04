@@ -6,19 +6,17 @@ process annotation {
 
     input:
     path gff3
-    val tabix
     val split_intron
     val annot_params
 
     output:
-    path ("${gff3.getBaseName()}.bed.gz"), emit: annotation
+    path ("${gff3.getBaseName()}.bed.gz*"), emit: annotation
 
     script:
-    def tabix_param = tabix ? "--tabix" : ""
     def intron_param = split_intron ? "--split-intron" : ""
     """
-        shoji annotation ${tabix_param} ${intron_param} ${annot_params} -a ${gff3} -o ${gff3.getBaseName()}.bed.gz
-        """
+    shoji annotation --tabix ${intron_param} ${annot_params} -a ${gff3} -o ${gff3.getBaseName()}.bed.gz
+    """
 }
 
 process createSlidingWindows {
@@ -28,19 +26,18 @@ process createSlidingWindows {
     container params.singularity.shoji
 
     input:
-    path annotation
-    val tabix
+    path(annotation, arity: 1..2) // expect either the annotation file alone or with its index
     val window
     val step
 
     output:
-    path ("${annotation.getBaseName()}_w${window}_s${step}.bed.gz"), emit: sliding_windows
+    path ("${annotation[0].getBaseName()}_w${window}_s${step}.bed.gz*"), emit: sliding_windows
 
     script:
-    def tabix_param = tabix ? "--tabix" : ""
+    
     """
-        shoji createSlidingWindows -c ${task.cpus} ${tabix_param} -w ${window} -s ${step} -a ${annotation} -o ${annotation.getBaseName()}_w${window}_s${step}.bed.gz
-        """
+    shoji createSlidingWindows -c ${task.cpus} --tabix -w ${window} -s ${step} -a ${annotation[0]} -o ${annotation[0].getBaseName()}_w${window}_s${step}.bed.gz
+    """
 }
 
 process extract {
@@ -51,7 +48,6 @@ process extract {
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
-    val tabix
     val ignore_pcr_duplicates
     val primary
     val mate
@@ -60,16 +56,15 @@ process extract {
     val extract_params
 
     output:
-    tuple val(sample), path("${sample}.bed.gz"), emit: sites
+    tuple val(sample), path("${sample}.bed.gz*"), emit: sites
 
     script:
-    def tabix_param = tabix ? "--tabix" : ""
     def ignore_pcr_param = ignore_pcr_duplicates ? "--ignore-pcr-duplicates" : ""
     def primary_param = primary ? "--primary" : ""
     def params = extract_params + " -e ${mate} -s ${site} -g ${offset}"
     """
-        shoji extract -c ${task.cpus} ${tabix_param} ${ignore_pcr_param} ${primary_param} ${params} -i ${index} -b ${bam} -o ${sample}.bed.gz
-        """
+    shoji extract -c ${task.cpus} --tabix ${ignore_pcr_param} ${primary_param} ${params} -i ${index} -b ${bam} -o ${sample}.bed.gz
+    """
 }
 
 process count {
@@ -79,16 +74,16 @@ process count {
     container params.singularity.shoji
 
     input:
-    tuple val(sample), path(bed)
-    path sliding_windows
+    tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
+    path (sliding_windows, arity: 1..2) // expect either the sliding window file alone or with its index
 
     output:
     path ("${sample}.parquet"), emit: counts
 
     script:
     """
-        shoji count -c ${task.cpus} -a ${sliding_windows} -n ${sample} -i ${bed} -o ${sample}.parquet
-        """
+    shoji count -c ${task.cpus} -a ${sliding_windows[0]} -n ${sample} -i ${sites[0]} -o ${sample}.parquet
+    """
 }
 
 process createMatrix {
@@ -109,6 +104,6 @@ process createMatrix {
 
     script:
     """
-        shoji createMatrix -c ${task.cpus} -i counts -s ${suffix} -a ${basename}_annotation.csv.gz -o ${basename}_counts.csv.gz -m ${basename}_maxCounts.csv.gz
-        """
+    shoji createMatrix -c ${task.cpus} -i counts -s ${suffix} -a ${basename}_annotation.csv.gz -o ${basename}_counts.csv.gz -m ${basename}_maxCounts.csv.gz
+    """
 }
