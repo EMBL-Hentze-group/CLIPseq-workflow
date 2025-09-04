@@ -15,3 +15,19 @@ workflow QC {
     html = fqcs.html
     multiqc = mqc.multiqc
 }
+
+/*
+Wrapper workflow for QC to merge QC results at different stages
+so that final channels are consistent across different workflows
+*/
+workflow QC_WRAPPER{
+    take:
+    ch_data
+    stage
+
+    main:
+    qcw = QC(ch_data, stage)
+
+    emit:
+    qc = qcw.zip|merge(qcw.html)|merge(qcw.multiqc)
+}

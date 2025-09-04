@@ -3,8 +3,6 @@ include {
     compare
     sourmashPlot
 } from '../modules/sourmash.nf'
-// include {COMPARE} from '../modules/sourmash.nf'
-// include {SOURMASH_PLOT} from '../modules/sourmash.nf'
 
 workflow SOURMASH {
     take:
@@ -23,4 +21,23 @@ workflow SOURMASH {
     signatures = signatures.sig
     comparison = comparisons.npy
     plot = plots.pdf
+}
+
+/*
+Wrapper workflow for SOURMASH to merge results at different stages
+so that final channels are consistent across different workflows
+*/
+workflow SOURMASH_WRAPPER {
+    take:
+    ch_data
+    sketch_params
+    abund
+    compare_K
+    stage
+
+    main:
+    smw = SOURMASH(ch_data, sketch_params, abund, compare_K, stage)
+
+    emit:
+    sourmash = smw.signatures|merge(smw.comparison)|merge(smw.plot)
 }
