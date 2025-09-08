@@ -20,7 +20,7 @@ process sketch {
     def out = "${sample}_${stage}.sig.zip"
     sketch_params = abund ? sketch_params + ",abund" : sketch_params
     """
-    sourmash sketch dna -f -p ${sketch_params} --name ${sample} -o ${out} ${fastqs}
+    sourmash sketch dna -f -p ${sketch_params} --name '${sample} ${stage}' -o ${out} ${fastqs}
     """
 }
 
