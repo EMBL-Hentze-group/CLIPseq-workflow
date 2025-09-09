@@ -4,7 +4,7 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 
 ## Workflow steps:
 - [x] Quality Control (FastQC, MultiQC)
-- [] UMI pre-processing (optional)
+- [ ] UMI pre-processing (optional)
 - [x] Adapter and Quality Trimming (fastp, to be fully implemented: cutadapt)
 - [x] rRNA filtering (bbduk)
 - [x] Alignment (STAR)
@@ -15,7 +15,7 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 - [x] crosslink sites extraction and count estimation (shoji)
 - [x] creating R-friendly matrices (shoji)
 - [x] Tracks from crosslink sites
-- [] Final stats report
+- [ ] Final stats report
 
 ## Includes builtin profiles for:
 
@@ -27,4 +27,4 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 
 ### Genomes:
 - [x] hsa (hg38)
-- [] rno
+- [ ] rno
