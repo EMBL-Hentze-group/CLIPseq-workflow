@@ -23,7 +23,7 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 
 - [x] eCLIP
 - [x] soniCLIP
-- [] R2-CLIP
+- [ ] R2-CLIP
 
 ### Genomes:
 - [x] hsa (hg38)
