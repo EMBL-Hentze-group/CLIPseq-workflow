@@ -25,7 +25,7 @@ process sketch {
 }
 
 process compare {
-    label "process_low"
+    label "process_medium"
     tag "${stage}"
 
     container params.singularity.sourmash
