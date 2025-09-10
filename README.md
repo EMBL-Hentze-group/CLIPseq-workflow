@@ -40,3 +40,11 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 ### Genomes:
 - [x] hsa (hg38)
 - [ ] rno
+
+## Running the workflow
+
+Make sure that Nextflow and Singularity are installed.
+
+Nextflow version tested: [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
+
+:warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving wierd errors.
