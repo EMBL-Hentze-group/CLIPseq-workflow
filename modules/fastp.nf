@@ -20,7 +20,7 @@ process fastp {
         outputs = " -o ${sample}_${stage}_R1.fq.gz -O ${sample}_${stage}_R2.fq.gz"
         inputs = " -i ${fastqs[0]}  -I ${fastqs[1]}"
     } else {
-        outputs = " -o ${sample}_${stage}_fq.gz"
+        outputs = " -o ${sample}_${stage}.fq.gz"
         inputs = " -i ${fastqs}"
     }
     """
