@@ -47,4 +47,6 @@ Make sure that Nextflow and Singularity are installed.
 
 Nextflow version tested: [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
 
-:warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving wierd errors.
+:warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
+
+For example submission scripts to run the pipeline, see repository [Clip-seq Nextflow Submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission) and make sure to browse to the branches in the repository.
