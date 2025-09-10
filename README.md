@@ -7,7 +7,7 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
     - [x] FastQC
     - [x] MultiQC
 - UMI pre-processing *optional*
-    - [x] umi-tools
+    - [ ] umi-tools
 - Adapter and Quality Trimming
     - [x] fastp
     - [ ] cutadapt (to be fully implemented)
