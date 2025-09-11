@@ -152,84 +152,85 @@ workflow {
 output{
     // QC
     raw_qc { 
-        path "QC/raw"
+        path params.out.qc.raw
     }
     trim_qc {
-        path "QC/trim"
+        path params.out.qc.trim
     }
     rRNA_qc { 
-        path "QC/rRNA_trim"
+        path params.out.qc.rRNA
     }
     kraken2_qc {
-        path "QC/Kraken2_contamination_check"
-    }
-    raw_sourmash {
-        path "Sourmash/raw"
+        path params.out.qc.kraken2
     }
     // SOURMASH
+    raw_sourmash {
+        path params.out.sourmash.raw
+    }
+    
     trim_sourmash {
-        path "Sourmash/trim"
+        path params.out.sourmash.trim
     }
     rRNA_sourmash {
-        path "Sourmash/rRNA_trim"
+        path params.out.sourmash.rRNA
     }
     align_sourmash {
-        path "Sourmash/Genome_align"
+        path params.out.sourmash.align
     }
     kraken2_sourmash {
-        path "Sourmash/Kraken2_contamination_check"
+        path params.out.sourmash.kraken2
     }
     // reads and stats
     trim_fq {
-        path "Fastq/trim"
+        path params.out.fastq.trim
     }
     trim_report {
-        path "Fastq/trim"
+        path params.out.fastq.trim
     }
     rRNA_fq {
-        path "Fastq/rRNA_trim"
+        path params.out.fastq.rRNA
     }
     rRNA_report {
-        path "Fastq/rRNA_trim"
+        path params.out.fastq.rRNA
     }
     // alignments
     align_bam {
-        path "Genome_align"
+        path params.out.align.genome
     }
     align_stats {
-        path "Genome_align"
+        path params.out.align.genome
     }
     align_mapped {
-        path "Fastq/Genome_align/mapped"
+        path params.out.fastq.mapped
     }
     align_unmapped {
-        path "Fastq/Genome_align/unmapped"
+        path params.out.fastq.unmapped
     }
     align_multimapped {
-        path "Fastq/Genome_align/multimapped"
+        path params.out.fastq.multimapped
     }
     // Shoji
     annotation {
-        path "Shoji/annotation"
+        path params.out.shoji.annotation
     }
     sites {
-        path "Shoji/sites"
+        path params.out.shoji.sites
     }
     counts {
-        path "Shoji/counts"
+        path params.out.shoji.counts
     }
     matrices {
-        path "Shoji/matrix"
+        path params.out.shoji.matrices
     }
     // Tracks
     bigwigs {
-        path "Tracks"
+        path params.out.shoji.tracks
     }
     // Contamination check with kraken2
     kraken2_fqs {
-        path "Kraken2_contamination_check/"
+        path params.out.kraken2.check
     }
     kraken2_report {
-        path "Kraken2_contamination_check/"
+        path params.out.kraken2.check
     }
 }
