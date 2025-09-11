@@ -21,9 +21,6 @@ include {TRACKS} from './subworkflows/tracks.nf'
 // kraken2
 include {KRAKEN2} from './subworkflows/kraken2.nf'
 
-// test
-include {
-    extract } from './modules/shoji.nf'
 
 
 nextflow.enable.dsl=2
@@ -98,11 +95,7 @@ workflow {
         // Shoji process alignments
         ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.split_intron, 
                     params.shoji.annotation_params, params.shoji.window, params.shoji.step)
-        
-        // ch_sites = extract(ch_star.bam, params.shoji.ignore_pcr_duplicates,
-        //                 params.shoji.primary, params.shoji.mate, params.shoji.site,
-        //                 params.shoji.offset, params.shoji.extract_params)
-        // check_out(ch_sites.sites, ch_sw.sliding_windows)
+        // Count reads in sliding windows
         ch_counts = COUNT(ch_star.bam, params.shoji.ignore_pcr_duplicates,
                         params.shoji.primary, params.shoji.mate, params.shoji.site,
                         params.shoji.offset, params.shoji.extract_params, ch_sw.sliding_windows)
@@ -152,85 +145,85 @@ workflow {
 output{
     // QC
     raw_qc { 
-        path params.out.qc.raw
+        path params.out.QC.raw
     }
     trim_qc {
-        path params.out.qc.trim
+        path params.out.QC.trim
     }
     rRNA_qc { 
-        path params.out.qc.rRNA
+        path params.out.QC.rRNA
     }
     kraken2_qc {
-        path params.out.qc.kraken2
+        path params.out.QC.kraken2
     }
     // SOURMASH
     raw_sourmash {
-        path params.out.sourmash.raw
+        path params.out.Sourmash.raw
     }
     
     trim_sourmash {
-        path params.out.sourmash.trim
+        path params.out.Sourmash.trim
     }
     rRNA_sourmash {
-        path params.out.sourmash.rRNA
+        path params.out.Sourmash.rRNA
     }
     align_sourmash {
-        path params.out.sourmash.align
+        path params.out.Sourmash.align
     }
     kraken2_sourmash {
-        path params.out.sourmash.kraken2
+        path params.out.Sourmash.kraken2
     }
     // reads and stats
     trim_fq {
-        path params.out.fastq.trim
+        path params.out.Fastq.trim
     }
     trim_report {
-        path params.out.fastq.trim
+        path params.out.Fastq.trim
     }
     rRNA_fq {
-        path params.out.fastq.rRNA
+        path params.out.Fastq.rRNA
     }
     rRNA_report {
-        path params.out.fastq.rRNA
+        path params.out.Fastq.rRNA
     }
     // alignments
     align_bam {
-        path params.out.align.genome
+        path params.out.Align.genome
     }
     align_stats {
-        path params.out.align.genome
+        path params.out.Align.genome
     }
     align_mapped {
-        path params.out.fastq.mapped
+        path params.out.Fastq.mapped
     }
     align_unmapped {
-        path params.out.fastq.unmapped
+        path params.out.Fastq.unmapped
     }
     align_multimapped {
-        path params.out.fastq.multimapped
+        path params.out.Fastq.multimapped
     }
     // Shoji
     annotation {
-        path params.out.shoji.annotation
+        path params.out.Shoji.annotation
     }
     sites {
-        path params.out.shoji.sites
+        path params.out.Shoji.sites
     }
     counts {
-        path params.out.shoji.counts
+        path params.out.Shoji.counts
     }
     matrices {
-        path params.out.shoji.matrices
+        path params.out.Shoji.matrices
     }
     // Tracks
     bigwigs {
-        path params.out.shoji.tracks
+        path params.out.Shoji.tracks
     }
     // Contamination check with kraken2
     kraken2_fqs {
-        path params.out.kraken2.check
+        path params.out.Kraken2.check
     }
     kraken2_report {
-        path params.out.kraken2.check
+        path params.out.Kraken2.check
     }
 }
