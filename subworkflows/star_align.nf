@@ -43,10 +43,6 @@ workflow STARALIGN {
     ch_sm_unmapped = SOURMASH_UNMAPPED(ch_fq_unmapped.fastq, sketch_params, abund, compare_K, "unmapped")
     ch_fq_multimapped = fastqMultimapped(ch_star.bam, "multimapped")
     ch_sm_multimapped = SOURMASH_MULTIMAPPED(ch_fq_multimapped.fastq, sketch_params, abund, compare_K, "multimapped")
-    // sourmash data
-    // ch_signatures = ch_sm_mapped.signatures.merge(ch_sm_unmapped.signatures, ch_sm_multimapped.signatures)
-    // ch_comparison = ch_sm_mapped.comparison.merge(ch_sm_unmapped.comparison, ch_sm_multimapped.comparison)
-    // ch_plot = ch_sm_mapped.plot.merge(ch_sm_unmapped.plot, ch_sm_multimapped.plot)
 
     emit:
     bam = ch_bam
