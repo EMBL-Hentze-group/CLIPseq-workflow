@@ -39,5 +39,5 @@ workflow SOURMASH_WRAPPER {
     smw = SOURMASH(ch_data, sketch_params, abund, compare_K, stage)
 
     emit:
-    sourmash = smw.signatures|merge(smw.comparison)|merge(smw.plot)
+    sourmash = smw.signatures|concat(smw.comparison)|concat(smw.plot)
 }
