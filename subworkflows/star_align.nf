@@ -6,12 +6,14 @@ include { UMI_DEDUP } from './umi_dedup.nf'
 include {
     fastq as fastqMapped ;
     fastq as fastqUnmapped ;
-    fastq as fastqMultimapped
+    fastq as fastqMultimapped ;
+    fastq as fastqDedup
 } from '../modules/samtools.nf'
 include {
     SOURMASH as SOURMASH_MAPPED ;
     SOURMASH as SOURMASH_UNMAPPED ;
-    SOURMASH as SOURMASH_MULTIMAPPED
+    SOURMASH as SOURMASH_MULTIMAPPED ;
+    SOURMASH as SOURMASH_DEDUP
 } from './sourmash.nf'
 
 workflow STARALIGN {
@@ -31,14 +33,29 @@ workflow STARALIGN {
         ch_dedup = UMI_DEDUP(ch_star.bam, dedup_params, "dedup")
         ch_bam = ch_dedup.bam
         ch_align = ch_star.bam
+        // mapped reads
+        ch_fq_map = fastqMapped(ch_star.bam, "mapped")
+        ch_sm_map = SOURMASH_MAPPED(ch_fq_map.fastq, sketch_params, abund, compare_K, "mapped")
+        // dedup reads
+        ch_fq_dedup = fastqDedup(ch_dedup.bam, "dedup")
+        ch_sm_dedup = SOURMASH_DEDUP(ch_fq_dedup.fastq, sketch_params, abund, compare_K, "dedup")
+        // merge mapped and dedup
+        ch_fq_mapped = ch_fq_map.fastq|concat(ch_fq_dedup.fastq)|multiMap{fq -> fastq:fq}
+        ch_sm_sigs = ch_sm_map.signatures|concat(ch_sm_dedup.signatures)
+        ch_sm_comp = ch_sm_map.comparison|concat(ch_sm_dedup.comparison)
+        ch_sm_plot = ch_sm_map.plot|concat(ch_sm_dedup.plot)
     }
     else {
         ch_bam = ch_star.bam
         ch_align = []
+        // to fastq and sourmash for mapped
+        ch_fq_mapped = fastqMapped(ch_star.bam, "mapped")
+        ch_sm_mapped = SOURMASH_MAPPED(ch_fq_mapped.fastq, sketch_params, abund, compare_K, "mapped")
+        ch_sm_sigs = ch_sm_mapped.signatures
+        ch_sm_comp = ch_sm_mapped.comparison
+        ch_sm_plot = ch_sm_mapped.plot
     }
-    // to fastq and sourmash
-    ch_fq_mapped = fastqMapped(ch_bam, "mapped")
-    ch_sm_mapped = SOURMASH_MAPPED(ch_fq_mapped.fastq, sketch_params, abund, compare_K, "mapped")
+    // to fastq and sourmash for unmapped and multimapped
     ch_fq_unmapped = fastqUnmapped(ch_star.bam, "unmapped")
     ch_sm_unmapped = SOURMASH_UNMAPPED(ch_fq_unmapped.fastq, sketch_params, abund, compare_K, "unmapped")
     ch_fq_multimapped = fastqMultimapped(ch_star.bam, "multimapped")
@@ -53,9 +70,9 @@ workflow STARALIGN {
     unmapped = ch_fq_unmapped.fastq
     multimapped = ch_fq_multimapped.fastq
     // sourmash
-    sourmash = ch_sm_mapped.signatures|merge(ch_sm_unmapped.signatures)|merge(ch_sm_multimapped.signatures)|
-                    merge(ch_sm_mapped.comparison)|merge(ch_sm_unmapped.comparison)|merge(ch_sm_multimapped.comparison)|
-                    merge(ch_sm_mapped.plot)|merge(ch_sm_unmapped.plot)|merge(ch_sm_multimapped.plot)
+    sourmash = ch_sm_sigs|concat(ch_sm_unmapped.signatures)|concat(ch_sm_multimapped.signatures)|
+                    concat(ch_sm_comp)|concat(ch_sm_unmapped.comparison)|concat(ch_sm_multimapped.comparison)|
+                    concat(ch_sm_plot)|concat(ch_sm_unmapped.plot)|concat(ch_sm_multimapped.plot)
 }
 
 workflow STARALIGN_2PASS {
@@ -76,22 +93,35 @@ workflow STARALIGN_2PASS {
         ch_dedup = UMI_DEDUP(ch_sp.bam, dedup_params, "dedup")
         ch_bam = ch_dedup.bam
         ch_align = ch_sp.bam|concat(ch_fp.bam)
+        // mapped reads
+        ch_fq_map = fastqMapped(ch_sp.bam, "mapped")
+        ch_sm_map = SOURMASH_MAPPED(ch_fq_map.fastq, sketch_params, abund, compare_K, "mapped")
+        // dedup reads
+        ch_fq_dedup = fastqDedup(ch_dedup.bam, "dedup")
+        ch_sm_dedup = SOURMASH_DEDUP(ch_fq_dedup.fastq, sketch_params, abund, compare_K, "dedup")
+        // merge mapped and dedup fastqs
+        ch_fq_mapped = ch_fq_map.fastq|concat(ch_fq_dedup.fastq)|multiMap{fq -> fastq:fq}
+        // merge mapped and dedup sourmash
+        ch_sm_sigs = ch_sm_map.signatures|concat(ch_sm_dedup.signatures)
+        ch_sm_comp = ch_sm_map.comparison|concat(ch_sm_dedup.comparison)
+        ch_sm_plot = ch_sm_map.plot|concat(ch_sm_dedup.plot)
+        
     }
     else {
         ch_bam = ch_sp.bam
         ch_align = ch_fp.bam
+        // to fastq and sourmash for mapped
+        ch_fq_mapped = fastqMapped(ch_sp.bam, "mapped")
+        ch_sm_mapped = SOURMASH_MAPPED(ch_fq_mapped.fastq, sketch_params, abund, compare_K, "mapped")
+        ch_sm_sigs = ch_sm_mapped.signatures
+        ch_sm_comp = ch_sm_mapped.comparison
+        ch_sm_plot = ch_sm_mapped.plot
     }
     // to fastq and sourmash
-    ch_fq_mapped = fastqMapped(ch_bam, "mapped")
-    ch_sm_mapped = SOURMASH_MAPPED(ch_fq_mapped.fastq, sketch_params, abund, compare_K, "mapped")
     ch_fq_unmapped = fastqUnmapped(ch_sp.bam, "unmapped")
     ch_sm_unmapped = SOURMASH_UNMAPPED(ch_fq_unmapped.fastq, sketch_params, abund, compare_K, "unmapped")
     ch_fq_multimapped = fastqMultimapped(ch_sp.bam, "multimapped")
     ch_sm_multimapped = SOURMASH_MULTIMAPPED(ch_fq_multimapped.fastq, sketch_params, abund, compare_K, "multimapped")
-    // sourmash data
-    // ch_signatures = ch_sm_mapped.signatures.merge(ch_sm_unmapped.signatures, ch_sm_multimapped.signatures)
-    // ch_comparison = ch_sm_mapped.comparison.merge(ch_sm_unmapped.comparison, ch_sm_multimapped.comparison)
-    // ch_plot = ch_sm_mapped.plot.merge(ch_sm_unmapped.plot, ch_sm_multimapped.plot)
 
     emit:
     bam = ch_bam
@@ -101,12 +131,7 @@ workflow STARALIGN_2PASS {
     mapped = ch_fq_mapped.fastq
     unmapped = ch_fq_unmapped.fastq
     multimapped = ch_fq_multimapped.fastq
-    // signatures = ch_signatures
-    // comparison = ch_comparison
-    // plot = ch_plot
-    // sourmash
-    // sourmash
-    sourmash = ch_sm_mapped.signatures|merge(ch_sm_unmapped.signatures)|merge(ch_sm_multimapped.signatures)|
-                    merge(ch_sm_mapped.comparison)|merge(ch_sm_unmapped.comparison)|merge(ch_sm_multimapped.comparison)|
-                    merge(ch_sm_mapped.plot)|merge(ch_sm_unmapped.plot)|merge(ch_sm_multimapped.plot)
+    sourmash = ch_sm_sigs|concat(ch_sm_unmapped.signatures)|concat(ch_sm_multimapped.signatures)|
+                    concat(ch_sm_comp)|concat(ch_sm_unmapped.comparison)|concat(ch_sm_multimapped.comparison)|
+                    concat(ch_sm_plot)|concat(ch_sm_unmapped.plot)|concat(ch_sm_multimapped.plot)
 }
