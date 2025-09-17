@@ -188,10 +188,10 @@ output{
     }
     // alignments
     align_bam {
-        path params.out.Align.genome
+        path params.out.Align.main
     }
     align_stats {
-        path params.out.Align.genome
+        path params.out.Align.main
     }
     align_mapped {
         path params.out.Fastq.mapped
@@ -221,9 +221,9 @@ output{
     }
     // Contamination check with kraken2
     kraken2_fqs {
-        path params.out.Kraken2.check
+        path params.out.Kraken2.main
     }
     kraken2_report {
-        path params.out.Kraken2.check
+        path params.out.Kraken2.main
     }
 }
