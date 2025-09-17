@@ -54,7 +54,7 @@ process fastq {
     script:
     def outputs = paired ? " -1 ${sample}_${stage}_R1.fq.gz -2 ${sample}_${stage}_R2.fq.gz" : " -0 ${sample}_${stage}_fq.gz"
     def params = " "
-    if (stage == "mapped") {
+    if (stage == "mapped" || stage == "dedup") {
         params = paired ? "-F 12" : "-F 4"
     }
     else if (stage == "unmapped") {
