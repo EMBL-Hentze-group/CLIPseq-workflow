@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/nf-schema/example/master/assets/schema_input.json",
+  "title": "nf-schema example - params.input schema",
+  "description": "Schema for the file provided with params.input",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "sample": {
+        "type": "string",
+        "pattern": "^\\S+$",
+        "errorMessage": "Sample name must be provided and cannot contain spaces"
+      },
+      "paired": {
+        "errorMessage": "Paired must be true or false",
+        "type": "boolean"
+      },
+      "bam": {
+        "errorMessage": "BAM file must be co-ordinate sorted, indexed and must have extension '.bam'",
+        "type": "string",
+        "pattern": "^\\S+\\.bam$"
+      },
+      "index": {
+        "errorMessage": "BAM file index, must have extension '.bai' or '.csi'",
+        "type": "string",
+        "pattern": "^\\S+\\.bam\\.(bai|csi)$"
+      }
+    },
+    "required": ["sample", "paired", "bam","index"]
+  }
+}
