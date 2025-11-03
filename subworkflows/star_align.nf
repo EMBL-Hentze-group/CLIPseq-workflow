@@ -40,6 +40,7 @@ workflow STARALIGN {
         ch_fq_dedup = fastqDedup(ch_dedup.bam, "dedup")
         ch_sm_dedup = SOURMASH_DEDUP(ch_fq_dedup.fastq, sketch_params, abund, compare_K, "dedup")
         // merge mapped and dedup
+        // @TODO: find an elegant solution
         ch_fq_mapped = ch_fq_map.fastq|concat(ch_fq_dedup.fastq)|multiMap{fq -> fastq:fq}
         ch_sm_sigs = ch_sm_map.signatures|concat(ch_sm_dedup.signatures)
         ch_sm_comp = ch_sm_map.comparison|concat(ch_sm_dedup.comparison)
@@ -47,7 +48,7 @@ workflow STARALIGN {
     }
     else {
         ch_bam = ch_star.bam
-        ch_align = []
+        ch_align = [] // @TODO: find an elegant solution
         // to fastq and sourmash for mapped
         ch_fq_mapped = fastqMapped(ch_star.bam, "mapped")
         ch_sm_mapped = SOURMASH_MAPPED(ch_fq_mapped.fastq, sketch_params, abund, compare_K, "mapped")
