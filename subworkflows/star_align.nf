@@ -16,6 +16,14 @@ include {
     SOURMASH as SOURMASH_DEDUP
 } from './sourmash.nf'
 
+include {
+    align_stats_STAR as stats_aln;
+    align_stats_STAR as stats_sp_aln;
+    align_stats_STAR as stats_dedup;
+    align_stats_STAR as stats_sp_dedup
+} from '../modules/stats.nf'
+
+
 workflow STARALIGN {
     take:
     ch_data
@@ -29,10 +37,14 @@ workflow STARALIGN {
 
     main:
     ch_star = starAlign_P(ch_data, genomeDir, star_params, "align")
+    // alignment stats for aligned reads
+    ch_read_aln_stats = stats_aln(ch_star.bam, "align")
     if (dedup) {
         ch_dedup = UMI_DEDUP(ch_star.bam, dedup_params, "dedup")
         ch_bam = ch_dedup.bam
         ch_align = ch_star.bam
+        // alignment stats for deduplicated reads
+        ch_read_aln_stats = ch_read_aln_stats.concat(stats_dedup(ch_dedup.bam, "dedup"))
         // mapped reads
         ch_fq_map = fastqMapped(ch_star.bam, "mapped")
         ch_sm_map = SOURMASH_MAPPED(ch_fq_map.fastq, sketch_params, abund, compare_K, "mapped")
@@ -66,6 +78,7 @@ workflow STARALIGN {
     bam = ch_bam
     align = ch_align
     stats = ch_star.stats
+    read_stats = ch_read_aln_stats
     junctions = ch_star.junctions
     mapped = ch_fq_mapped.fastq
     unmapped = ch_fq_unmapped.fastq
@@ -90,10 +103,14 @@ workflow STARALIGN_2PASS {
     main:
     ch_fp = starAlign_P(ch_data, genomeDir, star_params, "firstPass")
     ch_sp = starAlign2Pass_P(ch_data, genomeDir, star_params, ch_fp.junctions.collect(), "secondPass")
+    // alignment stats for aligned reads after second pass
+    ch_read_aln_stats = stats_sp_aln(ch_sp.bam, "align")
     if (dedup) {
         ch_dedup = UMI_DEDUP(ch_sp.bam, dedup_params, "dedup")
         ch_bam = ch_dedup.bam
         ch_align = ch_sp.bam|concat(ch_fp.bam)
+        // alignment stats for deduplicated reads after second pass
+        ch_read_aln_stats = ch_read_aln_stats.concat(stats_sp_dedup(ch_dedup.bam, "dedup"))
         // mapped reads
         ch_fq_map = fastqMapped(ch_sp.bam, "mapped")
         ch_sm_map = SOURMASH_MAPPED(ch_fq_map.fastq, sketch_params, abund, compare_K, "mapped")
@@ -128,6 +145,7 @@ workflow STARALIGN_2PASS {
     bam = ch_bam
     align = ch_align
     stats = ch_fp.stats.merge(ch_sp.stats)
+    read_stats = ch_read_aln_stats
     junctions = ch_fp.junctions.merge(ch_sp.junctions)
     mapped = ch_fq_mapped.fastq
     unmapped = ch_fq_unmapped.fastq
