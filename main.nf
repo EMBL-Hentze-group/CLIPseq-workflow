@@ -1,7 +1,11 @@
 include {samplesheetToList} from 'plugin/nf-schema'
-// Raw QC and Sourmash
+// Raw QC and Sourmash and stats
 include {QC_WRAPPER as QC} from './subworkflows/qc.nf'
 include {SOURMASH_WRAPPER as SOURMASH} from './subworkflows/sourmash.nf'
+// read stats
+include {
+    stats as stats_raw
+    } from './modules/seqkit.nf'
 // Trim 
 include {FASTP} from './subworkflows/fastp.nf'
 include {FASTP as FASTP_2STEP} from './subworkflows/fastp_two_step.nf'
@@ -20,6 +24,8 @@ include { createMatrix } from './modules/shoji.nf'
 include {TRACKS} from './subworkflows/tracks.nf'
 // kraken2
 include {KRAKEN2} from './subworkflows/kraken2.nf'
+// combine stats
+include {sample_stats; compile_stats} from './modules/stats.nf'
 
 
 
@@ -35,7 +41,7 @@ def flatten_fqs = { sample, paired, fqs ->
 }
 
 def get_alignment =  {
-    sample, paired, bam, index ->
+    _sample, _paired, bam, index ->
         return [bam, index]
 }
 
@@ -56,6 +62,8 @@ workflow {
         ch_raw_qc = QC(ch_data, "raw") // raw QC
         ch_raw_sourmash = SOURMASH(ch_data, params.sourmash.sketch, params.sourmash.abund, 
                             params.sourmash.comparison_K, "raw") // raw sourmash
+        // seqkit stats
+        raw_reads_stats = stats_raw(ch_data, "raw")
         // adapter trimming
         if (params.two_step_trim) { // two step trim
             ch_trim = FASTP_2STEP(ch_data, params.fastp.trim1, params.fastp.trim2, params.sourmash.sketch, 
@@ -71,6 +79,8 @@ workflow {
         // trim rRNA
         ch_bbduk = BBDUK(ch_trim.trimmed, params.bbduk.ref, params.bbduk.params, 
                     params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // bbduk to remove rRNA
+        // concatenate read stats until this point
+        ch_read_stats = raw_reads_stats.stats.concat(ch_trim.read_stats, ch_bbduk.read_stats)
         // Align
         if(params.twopass_mapping) { // two pass mapping
             ch_star = STARALIGN_2PASS(ch_bbduk.free, params.STAR.genomeDir, params.STAR.align_params, 
@@ -92,6 +102,26 @@ workflow {
         } else {
             ch_bam = ch_star.bam
         }
+        // concatenate alignment and optionally dedup stats to read stats
+        ch_all_stats = ch_read_stats.concat(ch_star.read_stats).map{
+            sample, stage, fname ->
+                return [sample, [stage, fname]]
+        }.groupTuple().map {
+            sample, stage_file_list ->
+                def stage_map = stage_file_list.collectEntries { stage, fname -> [(stage): fname] }
+                def files = stage_map.values() as List
+                return [sample, stage_map, files]
+                /*
+                ** Warning **
+                This is a hack to make sure that all input files are staged, 
+                otherwise process `sample_stats` will fail when run in a container
+                */
+        }
+        // combine stats per sample
+        ch_sample_stats = sample_stats(ch_all_stats)
+        // compile all stats for all samples
+        all_stats = compile_stats(ch_sample_stats.collect())
+ 
         // Shoji process alignments
         ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.split_intron, 
                     params.shoji.annotation_params, params.shoji.window, params.shoji.step)
@@ -140,6 +170,8 @@ workflow {
         kraken2_report = ch_kraken2.report
         kraken2_sourmash = ch_kraken2.sourmash
         kraken2_qc = ch_kraken2.qc
+        // all per sample and combined stats
+        combined_stats = all_stats.concat(ch_sample_stats)
 }
 
 output{
@@ -225,5 +257,9 @@ output{
     }
     kraken2_report {
         path params.out.Kraken2.main
+    }
+    // stats
+    combined_stats {
+        path params.out.Stats.main 
     }
 }
