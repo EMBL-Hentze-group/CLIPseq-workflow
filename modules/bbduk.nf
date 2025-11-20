@@ -16,7 +16,9 @@ process bbduk {
 
     script:
     def stats = "${sample}_rRNA_match.stats.txt"
-    def output_free, output_match, inputs
+    def output_free
+    def output_match
+    def inputs
     if (paired) {
         output_free = "out=${sample}_R1_rRNA_free.fq.gz out2=${sample}_R2_rRNA_free.fq.gz"
         output_match = "outm=${sample}_R1_rRNA_match.fq.gz outm2=${sample}_R2_rRNA_match.fq.gz"
