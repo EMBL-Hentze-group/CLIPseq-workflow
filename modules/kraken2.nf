@@ -18,7 +18,9 @@ process kraken2 {
 
     script:
     def out_report = "${sample}_${stage}_kraken2_report.txt"
-    def class_fq, unclass_fq, inputs
+    def class_fq
+    def unclass_fq
+    def inputs
     if (paired) {
         class_fq = "--classified-out ${sample}_${stage}_kraken2_classified#.fq"
         unclass_fq = "--unclassified-out ${sample}_${stage}_kraken2_unclassified#.fq"
