@@ -2,6 +2,9 @@
 
 This is a Nextflow workflow for processing CLIP-seq data. This workflow is designed to support multiple CLIP protocols
 
+## Shoji branch
+run shoji for downstream processing and crosslink site extraction on aligned BAM files.
+
 ## Workflow steps:
 - Quality Control
     - [x] FastQC
@@ -40,6 +43,7 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 ### Genomes:
 - [x] hsa (hg38)
 - [ ] rno
+
 
 ## Running the workflow
 

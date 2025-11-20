@@ -1,13 +1,8 @@
 include {samplesheetToList} from 'plugin/nf-schema'
-// Raw QC and Sourmash and stats
+// Raw QC and Sourmash
 include {QC_WRAPPER as QC} from './subworkflows/qc.nf'
 include {SOURMASH_WRAPPER as SOURMASH} from './subworkflows/sourmash.nf'
-// read stats
-include {
-    stats as stats_raw
-    } from './modules/seqkit.nf'
 // Trim 
-include {FASTP} from './subworkflows/fastp.nf'
 include {FASTP as FASTP_2STEP} from './subworkflows/fastp_two_step.nf'
 // BBDUK
 include {BBDUK} from './subworkflows/bbduk.nf'
@@ -22,12 +17,6 @@ include {COUNT} from './subworkflows/shoji_count.nf'
 include { createMatrix } from './modules/shoji.nf'
 // Tracks
 include {TRACKS} from './subworkflows/tracks.nf'
-// kraken2
-include {KRAKEN2} from './subworkflows/kraken2.nf'
-// combine stats
-include {sample_stats; compile_stats} from './modules/stats.nf'
-
-
 
 nextflow.enable.dsl=2
 nextflow.preview.output= true
@@ -41,7 +30,7 @@ def flatten_fqs = { sample, paired, fqs ->
 }
 
 def get_alignment =  {
-    _sample, _paired, bam, index ->
+    sample, paired, bam, index ->
         return [bam, index]
 }
 
@@ -62,8 +51,6 @@ workflow {
         ch_raw_qc = QC(ch_data, "raw") // raw QC
         ch_raw_sourmash = SOURMASH(ch_data, params.sourmash.sketch, params.sourmash.abund, 
                             params.sourmash.comparison_K, "raw") // raw sourmash
-        // seqkit stats
-        raw_reads_stats = stats_raw(ch_data, "raw")
         // adapter trimming
         if (params.two_step_trim) { // two step trim
             ch_trim = FASTP_2STEP(ch_data, params.fastp.trim1, params.fastp.trim2, params.sourmash.sketch, 
@@ -72,15 +59,13 @@ workflow {
             ch_trimmed_report = ch_trim.report|merge(ch_trim.first_report)
         }else{ // one step trim
             ch_trim = FASTP(ch_data, params.fastp.trim, params.sourmash.sketch, params.sourmash.abund, 
-                        params.sourmash.comparison_K,"trim") // single step trim with fastp
+                        params.sourmash.comparison_K) // single step trim with fastp
             ch_trimmed_fqs = ch_trim.trimmed
             ch_trimmed_report = ch_trim.report
         }
         // trim rRNA
         ch_bbduk = BBDUK(ch_trim.trimmed, params.bbduk.ref, params.bbduk.params, 
                     params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // bbduk to remove rRNA
-        // concatenate read stats until this point
-        ch_read_stats = raw_reads_stats.stats.concat(ch_trim.read_stats, ch_bbduk.read_stats)
         // Align
         if(params.twopass_mapping) { // two pass mapping
             ch_star = STARALIGN_2PASS(ch_bbduk.free, params.STAR.genomeDir, params.STAR.align_params, 
@@ -102,40 +87,18 @@ workflow {
         } else {
             ch_bam = ch_star.bam
         }
-        // concatenate alignment and optionally dedup stats to read stats
-        ch_all_stats = ch_read_stats.concat(ch_star.read_stats).map{
-            sample, stage, fname ->
-                return [sample, [stage, fname]]
-        }.groupTuple().map {
-            sample, stage_file_list ->
-                def stage_map = stage_file_list.collectEntries { stage, fname -> [(stage): fname] }
-                def files = stage_map.values() as List
-                return [sample, stage_map, files]
-                /*
-                ** Warning **
-                This is a hack to make sure that all input files are staged, 
-                otherwise process `sample_stats` will fail when run in a container
-                */
-        }
-        // combine stats per sample
-        ch_sample_stats = sample_stats(ch_all_stats)
-        // compile all stats for all samples
-        all_stats = compile_stats(ch_sample_stats.collect())
- 
         // Shoji process alignments
-        ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.split_intron, 
+        ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.tabix, params.shoji.split_intron, 
                     params.shoji.annotation_params, params.shoji.window, params.shoji.step)
-        // Count reads in sliding windows
-        ch_counts = COUNT(ch_star.bam, params.shoji.ignore_pcr_duplicates,
+        ch_sw.annotation.view()
+        ch_sw.sliding_windows.view()
+        ch_counts = COUNT(ch_star.bam, params.shoji.tabix, params.shoji.ignore_pcr_duplicates,
                         params.shoji.primary, params.shoji.mate, params.shoji.site,
                         params.shoji.offset, params.shoji.extract_params, ch_sw.sliding_windows)
         ch_matrix = createMatrix(ch_counts.counts.collect(), params.shoji.baseName, params.shoji.suffix)
         // Tracks
         ch_tracks = TRACKS(ch_counts.sites, params.tracks.genome, params.tracks.params)
-        // Check contamination for unmapped reads with kraken2
-        ch_kraken2 = KRAKEN2(ch_star.unmapped, params.kraken2.db, params.kraken2.kraken2_params, 
-                        params.kraken2.mpa_params, params.sourmash.sketch, params.sourmash.abund, 
-                        params.sourmash.comparison_K, "unmapped")
+
         publish:
         // Raw
         raw_qc = ch_raw_qc.qc
@@ -165,101 +128,76 @@ workflow {
         matrices = ch_matrix.annotation|concat(ch_matrix.countsMat)|concat(ch_matrix.maxCountsMat)
         // Tracks
         bigwigs = ch_tracks.bw
-        // kraken2
-        kraken2_fqs = ch_kraken2.classified|concat(ch_kraken2.unclassified)
-        kraken2_report = ch_kraken2.report
-        kraken2_sourmash = ch_kraken2.sourmash
-        kraken2_qc = ch_kraken2.qc
-        // all per sample and combined stats
-        combined_stats = all_stats.concat(ch_sample_stats)
 }
 
 output{
     // QC
     raw_qc { 
-        path params.out.QC.raw
+        path "QC/raw"
     }
     trim_qc {
-        path params.out.QC.trim
+        path "QC/trim"
     }
     rRNA_qc { 
-        path params.out.QC.rRNA
+        path "QC/rRNA_trim"
     }
-    kraken2_qc {
-        path params.out.QC.kraken2
+    raw_sourmash {
+        path "Sourmash/raw"
     }
     // SOURMASH
-    raw_sourmash {
-        path params.out.Sourmash.raw
-    }
-    
     trim_sourmash {
-        path params.out.Sourmash.trim
+        path "Sourmash/trim"
     }
     rRNA_sourmash {
-        path params.out.Sourmash.rRNA
+        path "Sourmash/rRNA_trim"
     }
     align_sourmash {
-        path params.out.Sourmash.align
-    }
-    kraken2_sourmash {
-        path params.out.Sourmash.kraken2
+        path "Sourmash/Genome_align"
     }
     // reads and stats
     trim_fq {
-        path params.out.Fastq.trim
+        path "Fastq/trim"
     }
     trim_report {
-        path params.out.Fastq.trim
+        path "Fastq/trim"
     }
     rRNA_fq {
-        path params.out.Fastq.rRNA
+        path "Fastq/rRNA_trim"
     }
     rRNA_report {
-        path params.out.Fastq.rRNA
+        path "Fastq/rRNA_trim"
     }
     // alignments
     align_bam {
-        path params.out.Align.main
+        path "Genome_align"
     }
     align_stats {
-        path params.out.Align.main
+        path "Genome_align"
     }
     align_mapped {
-        path params.out.Fastq.mapped
+        path "Fastq/Genome_align/mapped"
     }
     align_unmapped {
-        path params.out.Fastq.unmapped
+        path "Fastq/Genome_align/unmapped"
     }
     align_multimapped {
-        path params.out.Fastq.multimapped
+        path "Fastq/Genome_align/multimapped"
     }
     // Shoji
     annotation {
-        path params.out.Shoji.annotation
+        path "Shoji/annotation"
     }
     sites {
-        path params.out.Shoji.sites
+        path "Shoji/sites"
     }
     counts {
-        path params.out.Shoji.counts
+        path "Shoji/counts"
     }
     matrices {
-        path params.out.Shoji.matrices
+        path "Shoji/analysis_files"
     }
     // Tracks
     bigwigs {
-        path params.out.Shoji.tracks
-    }
-    // Contamination check with kraken2
-    kraken2_fqs {
-        path params.out.Kraken2.main
-    }
-    kraken2_report {
-        path params.out.Kraken2.main
-    }
-    // stats
-    combined_stats {
-        path params.out.Stats.main 
+        path "Tracks"
     }
 }
