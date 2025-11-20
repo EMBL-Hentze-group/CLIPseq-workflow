@@ -12,10 +12,12 @@ process cutadapt {
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
     path("${sample}_${stage}_report.json"), emit: report
+    tuple val(sample), val(stage), path("${sample}_${stage}_report.json"), emit: stats
 
     script:
     def json = "${sample}_${stage}_report.json"
-    def outputs, inputs
+    def outputs
+    def inputs
     if (paired) {
         outputs = " -o ${sample}_${stage}_R1.fq.gz -p ${sample}_${stage}_R2.fq.gz"
         inputs = "${fastqs[0]} ${fastqs[1]}"
