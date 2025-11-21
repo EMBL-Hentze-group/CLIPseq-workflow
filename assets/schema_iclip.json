@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "iCLIP fastq schema",
+    "description": "Schema for demultiplexing iCLIP fastq files",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "fastq": {
+                "type": "string",
+                "pattern": "^\\S+\\.(f(ast)?q|txt)\\.gz$",
+                "errorMessage": "FastQ file cannot contain spaces and must have extension '.fq.gz', '.fastq.gz', or '.txt.gz'"
+            },
+            "barcode":{
+                "type": "string",
+                "pattern": "^\\S+\\.fa$",
+                "errorMessage": "Barcode must be provided,  cannot contain spaces and must have extension '.fa'"
+            }
+        },
+        "required": ["fastq", "barcode"]
+    }
+}

@@ -36,10 +36,10 @@ process compare {
     val stage
 
     output:
-    tuple path("${stage}_${K}compare.npy"), path("${stage}_${K}compare.npy.labels.txt"), emit: npy
+    tuple path("${stage}_k${K}_compare.npy"), path("${stage}_k${K}_compare.npy.labels.txt"), emit: npy
 
     script:
-    def out = "${stage}_${K}compare.npy"
+    def out = "${stage}_k${K}_compare.npy"
     """
     sourmash compare -f -p ${task.cpus} -k ${K} -o ${out} ${sig}
     """
@@ -60,7 +60,7 @@ process sourmashPlot {
     path ("${npy}.matrix.pdf"), emit: pdf
 
     script:
-    def outdir = "${stage}_${K}"
+    def outdir = "${stage}_k${K}"
     """
     mkdir -p ${outdir} &&
     sourmash plot -f --pdf --output-dir ${outdir} --labeltext ${labels} ${npy} &&

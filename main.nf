@@ -1,4 +1,6 @@
 include {samplesheetToList} from 'plugin/nf-schema'
+// demultiplex (only for iCLIP now)
+include {demultiplex} from './modules/flexbar.nf'
 // Raw QC and Sourmash and stats
 include {QC_WRAPPER as QC} from './subworkflows/qc.nf'
 include {SOURMASH_WRAPPER as SOURMASH} from './subworkflows/sourmash.nf'
@@ -47,7 +49,17 @@ def get_alignment =  {
 
 workflow {
     main:
-        ch_data = Channel
+        if(params.demultiplex){
+            // @TODO: make demultiplex a default param in the schema
+            ch_init = Channel
+                .fromList(samplesheetToList(params.input, "./assets/schema_iclip.json"))
+            ch_pre = demultiplex(ch_init, "iCLIP", params.min_read_length, " --umi-tags ")
+            ch_data = ch_pre.flatten().map{ file -> 
+                def sample = file.getBaseName(file.name.endsWith('.gz') ? 2 : 1).replaceFirst(/^.*\_barcode\_/,'')
+                return [sample, params.is_paired, [file]]
+            }
+        }else{
+            ch_data = Channel
             .fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
             .map {
                 sample, fastq_1, fastq_2 ->
@@ -58,6 +70,7 @@ workflow {
                         return [ sample, true, [fastq_1, fastq_2]]
                     }
             }
+        }
         // Raw data QC
         ch_raw_qc = QC(ch_data, "raw") // raw QC
         ch_raw_sourmash = SOURMASH(ch_data, params.sourmash.sketch, params.sourmash.abund, 
@@ -76,18 +89,35 @@ workflow {
             ch_trimmed_fqs = ch_trim.trimmed
             ch_trimmed_report = ch_trim.report
         }
-        // trim rRNA
-        ch_bbduk = BBDUK(ch_trim.trimmed, params.bbduk.ref, params.bbduk.params, 
-                    params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // bbduk to remove rRNA
-        // concatenate read stats until this point
-        ch_read_stats = raw_reads_stats.stats.concat(ch_trim.read_stats, ch_bbduk.read_stats)
+        if(params.rRNA_trim){
+            // trim rRNA
+            ch_bbduk = BBDUK(ch_trim.trimmed, params.bbduk.ref, params.bbduk.params, 
+                        params.sourmash.sketch, params.sourmash.abund, params.sourmash.comparison_K) // bbduk to remove rRNA
+            ch_trimmed_reads = ch_bbduk.free
+            // concatenate read stats until this point
+            ch_read_stats = raw_reads_stats.stats.concat(ch_trim.read_stats, ch_bbduk.read_stats)
+        }
+        else{
+            ch_trimmed_reads = ch_trim.trimmed
+            // concatenate read stats until this point
+            ch_read_stats = raw_reads_stats.stats.concat(ch_trim.read_stats)
+            /*
+            @TODO: find a more elegant way to handle this
+            */
+            ch_bbduk = [:]
+            ch_bbduk.qc = Channel.empty()
+            ch_bbduk.sourmash = Channel.empty()
+            ch_bbduk.free = Channel.empty()
+            ch_bbduk.match = Channel.empty()
+            ch_bbduk.stats = Channel.empty()
+        }
         // Align
         if(params.twopass_mapping) { // two pass mapping
-            ch_star = STARALIGN_2PASS(ch_bbduk.free, params.STAR.genomeDir, params.STAR.align_params, 
+            ch_star = STARALIGN_2PASS(ch_trimmed_reads, params.STAR.genomeDir, params.STAR.align_params, 
                         params.dedup, params.umi_tools.dedup_params, params.sourmash.sketch, 
                         params.sourmash.abund, params.sourmash.comparison_K) // star align
         } else {
-            ch_star = STARALIGN(ch_bbduk.free, params.STAR.genomeDir, params.STAR.align_params, params.dedup, 
+            ch_star = STARALIGN(ch_trimmed_reads, params.STAR.genomeDir, params.STAR.align_params, params.dedup, 
                         params.umi_tools.dedup_params, params.sourmash.sketch, params.sourmash.abund, 
                         params.sourmash.comparison_K) // star align
         }
