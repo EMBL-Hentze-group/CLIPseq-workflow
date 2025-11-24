@@ -51,6 +51,9 @@ process sample_stats {
     if (stage_stat_map.containsKey("dedup")){
         args.addAll(["-d", stage_stat_map["dedup"]])
     }
+    if (stage_stat_map.containsKey("kraken2")){
+        args.addAll(["-k", stage_stat_map["kraken2"]])
+    }
     def cmd_args = args.join(" ")
     """
     echo $cmd_args
