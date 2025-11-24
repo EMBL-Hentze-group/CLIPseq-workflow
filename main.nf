@@ -1,6 +1,6 @@
 include {samplesheetToList} from 'plugin/nf-schema'
 // demultiplex (only for iCLIP now)
-include {demultiplex} from './modules/flexbar.nf'
+include {DEMULTIPLEX} from './subworkflows/demultiplex.nf'
 // Raw QC and Sourmash and stats
 include {QC_WRAPPER as QC} from './subworkflows/qc.nf'
 include {SOURMASH_WRAPPER as SOURMASH} from './subworkflows/sourmash.nf'
@@ -53,11 +53,7 @@ workflow {
             // @TODO: make demultiplex a default param in the schema
             ch_init = Channel
                 .fromList(samplesheetToList(params.input, "./assets/schema_iclip.json"))
-            ch_pre = demultiplex(ch_init, "iCLIP", params.min_read_length, " --umi-tags ")
-            ch_data = ch_pre.flatten().map{ file -> 
-                def sample = file.getBaseName(file.name.endsWith('.gz') ? 2 : 1).replaceFirst(/^.*\_barcode\_/,'')
-                return [sample, params.is_paired, [file]]
-            }
+            ch_data = DEMULTIPLEX(ch_init, params.bc_pattern, params.min_read_length).fastq
         }else{
             ch_data = Channel
             .fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
@@ -84,7 +80,7 @@ workflow {
             ch_trimmed_fqs = ch_trim.trimmed|concat(ch_trim.first)
             ch_trimmed_report = ch_trim.report|merge(ch_trim.first_report)
         }else{ // one step trim
-            ch_trim = FASTP(ch_data, params.fastp.trim, params.sourmash.sketch, params.sourmash.abund, 
+            ch_trim = FASTP(ch_data, params.adapters, params.fastp.trim, params.sourmash.sketch, params.sourmash.abund, 
                         params.sourmash.comparison_K,"trim") // single step trim with fastp
             ch_trimmed_fqs = ch_trim.trimmed
             ch_trimmed_report = ch_trim.report
