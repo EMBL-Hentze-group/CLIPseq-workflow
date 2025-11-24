@@ -132,8 +132,23 @@ workflow {
         } else {
             ch_bam = ch_star.bam
         }
-        // concatenate alignment and optionally dedup stats to read stats
-        ch_all_stats = ch_read_stats.concat(ch_star.read_stats).map{
+        
+        // Shoji process alignments
+        ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.split_intron, 
+                    params.shoji.annotation_params, params.shoji.window, params.shoji.step)
+        // Count reads in sliding windows
+        ch_counts = COUNT(ch_star.bam, params.shoji.ignore_pcr_duplicates,
+                        params.shoji.primary, params.shoji.mate, params.shoji.site,
+                        params.shoji.offset, params.shoji.extract_params, ch_sw.sliding_windows)
+        ch_matrix = createMatrix(ch_counts.counts.collect(), params.shoji.baseName, params.shoji.suffix)
+        // Tracks
+        ch_tracks = TRACKS(ch_counts.sites, params.tracks.genome, params.tracks.params)
+        // Check contamination for unmapped reads with kraken2
+        ch_kraken2 = KRAKEN2(ch_star.unmapped, params.kraken2.db, params.kraken2.kraken2_params, 
+                        params.kraken2.mpa_params, params.sourmash.sketch, params.sourmash.abund, 
+                        params.sourmash.comparison_K, "unmapped")
+        // concatenate alignment and optionally dedup stats and kraken classification to read stats
+        ch_all_stats = ch_read_stats.concat(ch_star.read_stats, ch_kraken2.read_stats).map{
             sample, stage, fname ->
                 return [sample, [stage, fname]]
         }.groupTuple().map {
@@ -152,20 +167,6 @@ workflow {
         // compile all stats for all samples
         all_stats = compile_stats(ch_sample_stats.collect())
  
-        // Shoji process alignments
-        ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.split_intron, 
-                    params.shoji.annotation_params, params.shoji.window, params.shoji.step)
-        // Count reads in sliding windows
-        ch_counts = COUNT(ch_star.bam, params.shoji.ignore_pcr_duplicates,
-                        params.shoji.primary, params.shoji.mate, params.shoji.site,
-                        params.shoji.offset, params.shoji.extract_params, ch_sw.sliding_windows)
-        ch_matrix = createMatrix(ch_counts.counts.collect(), params.shoji.baseName, params.shoji.suffix)
-        // Tracks
-        ch_tracks = TRACKS(ch_counts.sites, params.tracks.genome, params.tracks.params)
-        // Check contamination for unmapped reads with kraken2
-        ch_kraken2 = KRAKEN2(ch_star.unmapped, params.kraken2.db, params.kraken2.kraken2_params, 
-                        params.kraken2.mpa_params, params.sourmash.sketch, params.sourmash.abund, 
-                        params.sourmash.comparison_K, "unmapped")
         publish:
         // Raw
         raw_qc = ch_raw_qc.qc
