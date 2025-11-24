@@ -6,6 +6,9 @@ This is a Nextflow workflow for processing CLIP-seq data. This workflow is desig
 run shoji for downstream processing and crosslink site extraction on aligned BAM files.
 
 ## Workflow steps:
+
+- Demultiplexing *optional*
+    - [x] mix of umi_tools and flexbar (only for iCLIP protocol currently)
 - Quality Control
     - [x] FastQC
     - [x] MultiQC
@@ -30,18 +33,20 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
     - [x] create R-friendly matrices (shoji)
     - [x] Tracks from crosslink sites
 - Final stats report
-    - [ ] to be implemented
+    - [x] from raw data to aligned/deduplicated and kraken report
 
 ## Includes builtin profiles for:
 
 ### Protocols:
 
 - [x] eCLIP
+- [x] iCLIP
 - [x] soniCLIP
 - [ ] R2-CLIP
 
 ### Genomes:
 - [x] hsa (hg38)
+- [ ] hsa (rRNA genome)
 - [ ] rno
 
 
