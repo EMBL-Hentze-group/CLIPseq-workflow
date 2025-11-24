@@ -40,13 +40,16 @@ workflow KRAKEN2{
     zip = fqcs_classified.zip.merge(fqcs_unclassified.zip)
     mqc_fq = multiqc_F(zip.collect(), "contamination_known_vs_unknown")
     mqc_report = multiqc_R(kraken2_out.report.map{it[1]}.collect(), "${stage}_kraken2_contamination")
-
     emit:
     classified = kraken2_out.classified
     unclassified = kraken2_out.unclassified
     report = kraken2_out.report.map{it[1]}.collect()|
                 merge(mpa_out.mpa.collect())|
                 merge(combined_mpa.mpa_report.collect())|merge(mqc_report.multiqc)
+    read_stats =  kraken2_out.report.map{
+        sample, report -> [sample, "kraken2", report]
+    }
+
     // sourmash
     sourmash = sourmash_classified.signatures|merge(sourmash_unclassified.signatures)|
                 merge(sourmash_classified.comparison)|merge(sourmash_unclassified.comparison)|
