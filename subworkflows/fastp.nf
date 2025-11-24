@@ -10,6 +10,7 @@ include { stats } from '../modules/seqkit.nf'
 workflow FASTP {
     take:
     ch_data
+    adapter_file
     cut_params
     sketch_params
     abund
@@ -17,7 +18,7 @@ workflow FASTP {
     stage
 
     main:
-    fastp = fastp_P(ch_data, cut_params, stage)
+    fastp = fastp_P(ch_data, adapter_file, cut_params, stage)
     fqcs = fastqc(fastp.trimmed, stage)
     mqc_fq = multiqc_F(fqcs.zip.collect(), stage)
     mqc_trim = multiqc_T(fastp.report.collect(), "${stage}_stats")
