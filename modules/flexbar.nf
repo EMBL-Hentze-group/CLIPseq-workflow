@@ -1,5 +1,5 @@
 process demultiplex{
-    label "process_medium"
+    label "process_high"
 
     container params.singularity.flexbar
 
@@ -15,6 +15,6 @@ process demultiplex{
     script:
     def params = flexbar_params + " -t ${prefix} -m ${min_read_length}"
     """
-    flexbar -r ${fastq} -b ${barcode} -z GZ -O flexbar.log ${params}
+    flexbar -n ${task.cpus} -r ${fastq} -b ${barcode} -z GZ -O flexbar.log ${params}
     """
 }
