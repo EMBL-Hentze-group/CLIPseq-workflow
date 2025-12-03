@@ -9,8 +9,13 @@ include {
     stats as stats_raw
     } from './modules/seqkit.nf'
 // Trim 
-include {FASTP} from './subworkflows/fastp.nf'
-include {FASTP as FASTP_2STEP} from './subworkflows/fastp_two_step.nf'
+include {
+    FASTP
+    FASTP_2STEP
+} from './subworkflows/fastp.nf'
+include {
+    CUTADAPT_2STEP
+} from './subworkflows/cutadapt_2step.nf'
 // BBDUK
 include {BBDUK} from './subworkflows/bbduk.nf'
 // STAR align
@@ -49,11 +54,14 @@ def get_alignment =  {
 
 workflow {
     main:
+        ch_demux_qc = Channel.empty()
         if(params.demultiplex){
-            // @TODO: make demultiplex a default param in the schema
+            
             ch_init = Channel
                 .fromList(samplesheetToList(params.input, "./assets/schema_iclip.json"))
-            ch_data = DEMULTIPLEX(ch_init, params.bc_pattern, params.min_read_length).fastq
+            ch_demux = DEMULTIPLEX(ch_init, "iCLIP", params.min_read_length, params.flexbar.params)
+            ch_data = ch_demux.fastq
+            ch_demux_qc = ch_demux.qc
         }else{
             ch_data = Channel
             .fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
@@ -75,7 +83,7 @@ workflow {
         raw_reads_stats = stats_raw(ch_data, "raw")
         // adapter trimming
         if (params.two_step_trim) { // two step trim
-            ch_trim = FASTP_2STEP(ch_data, params.fastp.trim1, params.fastp.trim2, params.sourmash.sketch, 
+            ch_trim = CUTADAPT_2STEP(ch_data, params.cutadapt.trim1, params.cutadapt.trim2, params.sourmash.sketch, 
                         params.sourmash.abund, params.sourmash.comparison_K) // two step trim with fastp
             ch_trimmed_fqs = ch_trim.trimmed|concat(ch_trim.first)
             ch_trimmed_report = ch_trim.report|merge(ch_trim.first_report)
@@ -117,7 +125,7 @@ workflow {
                         params.umi_tools.dedup_params, params.sourmash.sketch, params.sourmash.abund, 
                         params.sourmash.comparison_K) // star align
         }
-        if(params.twopass_mapping || params.dedup) { 
+        if(params.twopass_mapping || params.dedup) {
             /*
             if two pass mapping or dedup, merge  bam channels
             ++++ NOTE ++++
@@ -165,7 +173,7 @@ workflow {
  
         publish:
         // Raw
-        raw_qc = ch_raw_qc.qc
+        raw_qc = ch_raw_qc.qc.concat(ch_demux_qc)
         raw_sourmash = ch_raw_sourmash.sourmash
         // Trim
         trim_qc = ch_trim.qc
