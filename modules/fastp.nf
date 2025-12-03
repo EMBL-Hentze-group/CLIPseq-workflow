@@ -7,7 +7,7 @@ process fastp {
     input:
     tuple val(sample), val(paired), path(fastqs)
     path adapter_file
-    val cut_params
+    val trim_params
     val stage
 
     output:
@@ -27,12 +27,12 @@ process fastp {
         inputs = " -i ${fastqs}"
     }
     if (adapter_file == null || adapter_file == "") {
-        cut_params = " -A "+ cut_params
+        trim_params = " -A "+ trim_params
     }else{
-        cut_params = " --adapter_fasta "+ adapter_file + " " + cut_params
+        trim_params = " --adapter_fasta "+ adapter_file + " " + trim_params
     }
     """
-    fastp --thread ${task.cpus} --adapter_fasta ${adapter_file} ${cut_params} -j ${json} ${outputs} ${inputs}
+    fastp --thread ${task.cpus} --adapter_fasta ${adapter_file} ${trim_params} -j ${json} ${outputs} ${inputs}
     """
 }
 
