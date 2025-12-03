@@ -11,14 +11,14 @@ workflow FASTP {
     take:
     ch_data
     adapter_file
-    cut_params
+    trim_params
     sketch_params
     abund
     compare_K
     stage
 
     main:
-    fastp = fastp_P(ch_data, adapter_file, cut_params, stage)
+    fastp = fastp_P(ch_data, adapter_file, trim_params, stage)
     fqcs = fastqc(fastp.trimmed, stage)
     mqc_fq = multiqc_F(fqcs.zip.collect(), stage)
     mqc_trim = multiqc_T(fastp.report.collect(), "${stage}_stats")
@@ -34,4 +34,32 @@ workflow FASTP {
     qc = fqcs.zip|merge(fqcs.html)|merge(mqc_fq.multiqc)
     // read stats
     read_stats = stats_read.stats
+}
+
+workflow FASTP_2STEP {
+    take:
+    ch_data
+    trim1_params
+    trim2_params
+    sketch_params
+    abund
+    compare_K
+
+    main:
+    trim1 = FASTP(ch_data, trim1_params, sketch_params, abund, compare_K, "trim1")
+    trim2 = FASTP(trim1.trimmed, trim2_params, sketch_params, abund, compare_K, "trim2")
+    emit:
+    // second trim
+    trimmed = trim2.trimmed
+    report = trim2.report
+    // first trim
+    first = trim1.trimmed
+    first_report = trim1.report
+    // sourmash
+    sourmash = trim1.sourmash|merge(trim2.sourmash)
+    // qc
+    qc = trim1.qc|merge(trim2.qc)
+    // read stats
+    read_stats = trim1.read_stats.concat(trim2.read_stats)
+
 }
