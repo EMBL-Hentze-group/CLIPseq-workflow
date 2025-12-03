@@ -1,7 +1,7 @@
-include {trim_demultiplex} from '../modules/fastp.nf'
+include {fastqc_demux} from '../modules/fastqc.nf'
 include {multiqc} from '../modules/multiqc.nf'
-include {extract} from '../modules/umi_tools.nf'
 include {demultiplex} from '../modules/flexbar.nf'
+include {fix_header} from '../modules/helpers.nf'
 
 /*
 This workflow performs demultiplexing of iCLIP data using UMI-tools and Flexbar.
@@ -10,20 +10,21 @@ This workflow performs demultiplexing of iCLIP data using UMI-tools and Flexbar.
 workflow DEMULTIPLEX{
     take:
     ch_init
-    bc_pattern
+    prefix
     min_read_length
+    flexbar_params
 
     main:
-    ch_trim = trim_demultiplex(ch_init, min_read_length)
-    ch_multiqc = multiqc(ch_trim.report.collect(), "demultiplex")
-    ch_pre = extract(ch_trim.fastq, bc_pattern)
-    ch_demux = demultiplex(ch_pre.fastq, "iCLIP", min_read_length, "")
-
+    ch_demux = demultiplex(ch_init, prefix, min_read_length, flexbar_params)
+    ch_fastqc = fastqc_demux(ch_init)
+    ch_multiqc = multiqc(ch_fastqc.zip.collect(), "before_demultiplex")
+    ch_fastq = fix_header(ch_demux.flatten())
+    
     emit:
-    fastq = ch_demux.flatten().map{file -> 
+    fastq = ch_fastq.map{file -> 
                 def sample = file.getBaseName(file.name.endsWith('.gz') ? 2 : 1).replaceFirst(/^.*\_barcode\_/,'')
+                // ^.*barcode_ is hardcoded in flexbar output naming convention
                 return [sample, false, [file]]
     }
-    report = ch_trim.report|merge(ch_multiqc.multiqc)
-    umi_log = ch_pre.log
+    qc = ch_fastqc.zip.collect().merge(ch_fastqc.html.collect(),ch_multiqc.multiqc)
 }
