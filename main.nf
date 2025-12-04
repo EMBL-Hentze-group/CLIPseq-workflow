@@ -141,9 +141,11 @@ workflow {
         ch_sw = CREATE_SLIDING_WINDOWS(params.shoji.gff3, params.shoji.split_intron, 
                     params.shoji.annotation_params, params.shoji.window, params.shoji.step)
         // Count reads in sliding windows
+        // prepare extract params here so that all values are updated
+        extract_params = "-q ${params.shoji.qual} --min_aln_len ${params.shoji.aln_len} --aln_frac ${params.shoji.aln_frac} --n_aln ${params.shoji.n_aln}"
         ch_counts = COUNT(ch_star.bam, params.shoji.ignore_pcr_duplicates,
                         params.shoji.primary, params.shoji.mate, params.shoji.site,
-                        params.shoji.offset, params.shoji.extract_params, ch_sw.sliding_windows)
+                        params.shoji.offset, extract_params, ch_sw.sliding_windows)
         ch_matrix = createMatrix(ch_counts.counts.collect(), params.shoji.baseName, params.shoji.suffix)
         // Tracks
         ch_tracks = TRACKS(ch_counts.sites, params.tracks.genome, params.tracks.params)
