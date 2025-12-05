@@ -34,10 +34,11 @@ include {KRAKEN2} from './subworkflows/kraken2.nf'
 // combine stats
 include {sample_stats; compile_stats} from './modules/stats.nf'
 
-
-
 nextflow.enable.dsl=2
-nextflow.preview.output= true
+if( nextflow.version < ' 25.10.0' ) {
+    nextflow.preview.output= true
+    // this feature is no longer in preview since version 25.10.0
+}
 
 def flatten_fqs = { sample, paired, fqs ->
     if (paired) {
@@ -79,6 +80,7 @@ workflow {
         ch_raw_qc = QC(ch_data, "raw") // raw QC
         ch_raw_sourmash = SOURMASH(ch_data, params.sourmash.sketch, params.sourmash.abund, 
                             params.sourmash.comparison_K, "raw") // raw sourmash
+        ch_all_raw_qc = ch_raw_qc.qc.concat(ch_demux_qc)
         // seqkit stats
         raw_reads_stats = stats_raw(ch_data, "raw")
         // adapter trimming
@@ -175,7 +177,7 @@ workflow {
  
         publish:
         // Raw
-        raw_qc = ch_raw_qc.qc.concat(ch_demux_qc)
+        raw_qc = ch_all_raw_qc
         raw_sourmash = ch_raw_sourmash.sourmash
         // Trim
         trim_qc = ch_trim.qc
