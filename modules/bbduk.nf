@@ -1,5 +1,5 @@
 process bbduk {
-    label "process_medium"
+    label "process_high"
     tag "${sample}"
 
     container params.singularity.bbmap
@@ -10,9 +10,9 @@ process bbduk {
     val bbduk_params
 
     output:
-    tuple val(sample), val(paired), path("${sample}*_rRNA_free.fq.gz"), emit: free
-    tuple val(sample), val(paired), path("${sample}*_rRNA_match.fq.gz"), emit: match
-    path ("${sample}*_rRNA_match.stats.txt"), emit: stats
+    tuple val(sample), val(paired), path("${sample}*_rRNA_free.fq.gz"), emit: free, optional: true
+    tuple val(sample), val(paired), path("${sample}*_rRNA_match.fq.gz"), emit: match, optional: true
+    path ("${sample}*_rRNA_match.stats.txt"), emit: stats, optional: true
 
     script:
     def stats = "${sample}_rRNA_match.stats.txt"
