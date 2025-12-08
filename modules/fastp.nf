@@ -26,13 +26,11 @@ process fastp {
         outputs = " -o ${sample}_${stage}.fq.gz"
         inputs = " -i ${fastqs}"
     }
-    if (adapter_file == null || adapter_file == "") {
-        trim_params = " -A "+ trim_params
-    }else{
+    if (adapter_file != null || adapter_file != "") {
         trim_params = " --adapter_fasta "+ adapter_file + " " + trim_params
     }
     """
-    fastp --thread ${task.cpus} --adapter_fasta ${adapter_file} ${trim_params} -j ${json} ${outputs} ${inputs}
+    fastp --thread ${task.cpus} ${trim_params} -j ${json} ${outputs} ${inputs}
     """
 }
 
