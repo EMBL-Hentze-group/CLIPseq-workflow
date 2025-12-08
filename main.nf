@@ -13,6 +13,7 @@ include {
     FASTP
     FASTP_2STEP
 } from './subworkflows/fastp.nf'
+include {CUTADAPT} from './subworkflows/cutadapt.nf'
 include {
     CUTADAPT_2STEP
 } from './subworkflows/cutadapt_2step.nf'
@@ -90,7 +91,7 @@ workflow {
             ch_trimmed_fqs = ch_trim.trimmed|concat(ch_trim.first)
             ch_trimmed_report = ch_trim.report|merge(ch_trim.first_report)
         }else{ // one step trim
-            ch_trim = FASTP(ch_data, params.adapters, params.fastp.trim, params.sourmash.sketch, params.sourmash.abund, 
+            ch_trim = FASTP(ch_data, params.fastp.adapters, params.fastp.trim, params.sourmash.sketch, params.sourmash.abund, 
                         params.sourmash.comparison_K,"trim") // single step trim with fastp
             ch_trimmed_fqs = ch_trim.trimmed
             ch_trimmed_report = ch_trim.report
