@@ -1,6 +1,8 @@
 include {samplesheetToList} from 'plugin/nf-schema'
 // demultiplex (only for iCLIP now)
 include {DEMULTIPLEX} from './subworkflows/demultiplex.nf'
+// extract UMIs from R2-CLIP reads
+include {R2CLIP_extract} from './modules/umi_tools.nf'
 // Raw QC and Sourmash and stats
 include {QC_WRAPPER as QC} from './subworkflows/qc.nf'
 include {SOURMASH_WRAPPER as SOURMASH} from './subworkflows/sourmash.nf'
@@ -58,13 +60,23 @@ workflow {
     main:
         ch_demux_qc = Channel.empty()
         if(params.demultiplex){
-            
+            // assuming that input is iCLIP, where umis and sample barcodes are mixed
             ch_init = Channel
                 .fromList(samplesheetToList(params.input, "./assets/schema_iclip.json"))
             ch_demux = DEMULTIPLEX(ch_init, "iCLIP", params.min_read_length, params.flexbar.params)
             ch_data = ch_demux.fastq
             ch_demux_qc = ch_demux.qc
+        }else if(params.r2_clip){
+            // assuming that input is R2-CLIP data, all/part of of read2 is umi, and typically 8bp long
+            // see parameter bc_pattern
+            ch_init = Channel.fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
+            ch_preprocess = R2CLIP_extract(ch_init, params.bc_pattern)
+            ch_data = ch_preprocess.fastq.map { sample, fastq ->
+                // sample, paired, [fastq paths]
+                return [ sample, false, [fastq]]
+            }    
         }else{
+            // iCLIP or soniCLIP
             ch_data = Channel
             .fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
             .map {
