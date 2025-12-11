@@ -41,12 +41,13 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 
 - [x] eCLIP
 - [x] iCLIP
-- [x] soniCLIP
 - [x] R2-CLIP
+- [x] soniCLIP
+
 
 ### Genomes:
-- [x] hsa (hg38)
-- [ ] hsa (rRNA genome)
+- [x] [hsa (hg38)](https://www.gencodegenes.org/human/release_42.html)
+- [ ] [hsa (rRNA genome)](https://doi.org/10.1016/j.jbc.2023.104766)
 - [ ] rno
 
 
@@ -61,6 +62,8 @@ Nextflow version(s) tested:
 :warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
 
 For example submission scripts to run the pipeline, see repository [Clip-seq Nextflow Submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission) and make sure to browse to the branches in the repository.
+
+Given below are example commands to run the workflow with data from supported CLIP protocols.
 
 ### eCLIP with human genome (hg38) on SLURM
 ```bash
