@@ -13,7 +13,7 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
     - [x] FastQC
     - [x] MultiQC
 - UMI pre-processing *optional*
-    - [ ] umi-tools
+    - [x] umi-tools (for R2-CLIP protocol)
 - Adapter and Quality Trimming
     - [x] fastp
     - [ ] cutadapt (to be fully implemented)
@@ -42,7 +42,7 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 - [x] eCLIP
 - [x] iCLIP
 - [x] soniCLIP
-- [ ] R2-CLIP
+- [x] R2-CLIP
 
 ### Genomes:
 - [x] hsa (hg38)
@@ -54,8 +54,49 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 
 Make sure that Nextflow and Singularity are installed.
 
-Nextflow version tested: [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
+Nextflow version(s) tested: 
+- [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
+- [`25.10.1`](https://github.com/nextflow-io/nextflow/releases/tag/v25.10.1)
 
 :warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
 
 For example submission scripts to run the pipeline, see repository [Clip-seq Nextflow Submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission) and make sure to browse to the branches in the repository.
+
+### eCLIP with human genome (hg38) on SLURM
+```bash
+# -bg to run in background
+nextflow -bg run main.nf -profile slurm,eCLIP,hsa \
+    --input /path/to/sample_sheet.csv \
+    -output-dir /path/to/output \
+    -work-dir /path/to/work \
+    -with-timeline -with-report -with-trace
+```
+
+### iCLIP with human genome (hg38) on SLURM
+```bash
+nextflow -bg run main.nf -profile slurm,iCLIP,hsa \
+    --input /path/to/sample_sheet.csv \
+    -output-dir /path/to/output \
+    -work-dir /path/to/work \
+    -with-timeline -with-report -with-trace
+```
+
+### R2-CLIP with human genome (hg38) on SLURM without rRNA filtering
+```bash
+nextflow -bg run main.nf -profile slurm,R2CLIP,hsa \
+    --rRNA_trim false \
+    --input /path/to/sample_sheet.csv \
+    -output-dir /path/to/output \
+    -work-dir /path/to/work \
+    -with-timeline -with-report -with-trace
+```
+
+### soniCLIP with human genome (hg38) on SLURM with custom Shoji paramters
+```bash
+nextflow -bg run main.nf -profile slurm,soniCLIP,hsa \
+    --shoji.aln_len 30 --shoji.aln_frac 0.85 --shoji.n_aln 5 \
+    --input /path/to/sample_sheet.csv \
+    -output-dir /path/to/output \
+    -work-dir /path/to/work \
+    -with-timeline -with-report -with-trace
+```
