@@ -40,3 +40,24 @@ process extract{
     umi_tools extract -p ${pattern} -I ${fastq} -E ${base}.log -S ${output}
     """
 }
+
+process R2CLIP_extract{
+    label "process_single"
+    tag "${sample}"
+
+    container params.singularity.umi_tools
+
+    input:
+    tuple val(sample), path(fastq_1), path(fastq_2)
+    val pattern
+
+    output:
+    tuple val(sample), path("${sample}.fq.gz"), emit: fastq
+    path("${sample}.log"), emit: log
+
+
+    script:
+    """
+    umi_tools extract  --bc-pattern2 ${pattern} --extract-method "string" -I ${fastq_1} --read2-in ${fastq_2} -E ${sample}.log -S ${sample}.fq.gz
+    """
+}
