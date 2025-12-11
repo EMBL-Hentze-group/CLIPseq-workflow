@@ -100,10 +100,28 @@ NNNNCGCGCGCGNN
 ### Running the workflow
 Given below are example commands to run the workflow with data from supported CLIP protocols.
 
+### Setup for private Gitlab repository access
+- Before running workflow setup a Personal Access Token (PAT) to pull the workflow from [EMBL Gitlab](https://git.embl.org/). For help, see [this link](https://docs.gitlab.com/user/profile/personal_access_tokens/)
+- setup config to pull the workflow-repo, see [this blog post](https://seqera.io/blog/configure-git-repositories-with-nextflow/)
+
+an example scm fill will look like:
+```bash
+providers {
+  gitlab {
+    user = 'username'
+    password = 'glpat-access-token-here'
+    server = 'https://git.embl.org/'
+  }
+}
+```
+
+:warning: Make sure to keep your PAT secure and do not share it publicly. Test the access before running the workflow.
+
 #### eCLIP with human genome (hg38) on SLURM
 ```bash
 # -bg to run in background
-nextflow -bg run main.nf -profile slurm,eCLIP,hsa \
+nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
+    -profile slurm,eCLIP,hsa \
     --input /path/to/sample_sheet.csv \
     -output-dir /path/to/output \
     -work-dir /path/to/work \
@@ -112,7 +130,8 @@ nextflow -bg run main.nf -profile slurm,eCLIP,hsa \
 
 #### iCLIP with human genome (hg38) on SLURM
 ```bash
-nextflow -bg run main.nf -profile slurm,iCLIP,hsa \
+nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
+    -profile slurm,iCLIP,hsa \
     --input /path/to/sample_sheet.csv \
     -output-dir /path/to/output \
     -work-dir /path/to/work \
@@ -121,7 +140,8 @@ nextflow -bg run main.nf -profile slurm,iCLIP,hsa \
 
 #### R2-CLIP with human genome (hg38) on SLURM without rRNA filtering
 ```bash
-nextflow -bg run main.nf -profile slurm,R2CLIP,hsa \
+nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
+    -profile slurm,R2CLIP,hsa \
     --input /path/to/sample_sheet.csv \
     --rRNA_trim false \
     -output-dir /path/to/output \
@@ -131,7 +151,8 @@ nextflow -bg run main.nf -profile slurm,R2CLIP,hsa \
 
 #### soniCLIP with human genome (hg38) on SLURM with custom Shoji paramters
 ```bash
-nextflow -bg run main.nf -profile slurm,soniCLIP,hsa \
+nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
+    -profile slurm,soniCLIP,hsa \
     --input /path/to/sample_sheet.csv \
     --shoji.aln_len 30 --shoji.aln_frac 0.85 --shoji.n_aln 5 \
     -output-dir /path/to/output \
