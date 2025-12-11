@@ -98,9 +98,8 @@ NNNNCGCGCGCGNN
 [flexbar](https://github.com/seqan/flexbar) is  used for demultiplexing iCLIP data based on the provided barcodes with corresponding header as sample name. UMIs (`N`s in the sequences) are extracted from the reads during demultiplexing and added to fastq header.
 
 ### Running the workflow
-Given below are example commands to run the workflow with data from supported CLIP protocols.
 
-### Setup for private Gitlab repository access
+#### Setup for private Gitlab repository access
 - Before running workflow setup a Personal Access Token (PAT) to pull the workflow from [EMBL Gitlab](https://git.embl.org/). For help, see [this link](https://docs.gitlab.com/user/profile/personal_access_tokens/)
 - setup config to pull the workflow-repo, see [this blog post](https://seqera.io/blog/configure-git-repositories-with-nextflow/)
 
@@ -116,6 +115,8 @@ providers {
 ```
 
 :warning: Make sure to keep your PAT secure and do not share it publicly. Test the access before running the workflow.
+
+Given below are example commands to run the workflow with data from supported CLIP protocols.
 
 #### eCLIP with human genome (hg38) on SLURM
 ```bash
