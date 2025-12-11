@@ -39,10 +39,10 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 
 ### Protocols:
 
-- [x] eCLIP
-- [x] iCLIP
-- [x] R2-CLIP
-- [x] soniCLIP
+- [x] [eCLIP](conf/protocol/eCLIP.config)
+- [x] [iCLIP](conf/protocol/iCLIP.config)
+- [x] [R2-CLIP](conf/protocol/R2CLIP.config)
+- [x] [soniCLIP](conf/protocol/soniCLIP.config)
 
 
 ### Genomes:
@@ -51,7 +51,7 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 - [ ] rno
 
 
-## Running the workflow
+## Workflow
 
 Make sure that Nextflow and Singularity are installed.
 
@@ -63,9 +63,44 @@ Nextflow version(s) tested:
 
 For example submission scripts to run the pipeline, see repository [Clip-seq Nextflow Submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission) and make sure to browse to the branches in the repository.
 
+### Sample sheet format
+
+This workflow uses [nf-schema](https://nextflow-io.github.io/nf-schema/latest/) plugin and the supported sample sheet format.
+
+#### eCLIP, R2-CLIP and soniCLIP
+For `eCLIP`, `R2-CLIP` and `soniCLIP` protocols, the following columns (in csv) is expected:
+|sample|fastq_1|fastq_2|
+|------|-------|-------|
+|sample1|/path/to/sample1_R1.fastq.gz| /path/to/sample1_R2.fastq.gz|
+
+- `eCLIP`: `fastq_2` column **MUST be** provided.
+- `R2-CLIP` uses `fastq_1` for acutal reads, and `fastq_2` is expected to contain only UMIs. [umi_tools `extract`](https://umi-tools.readthedocs.io/en/latest/reference/extract.html) is used to extract UMIs from `fastq_2` (based on parameter `bc_pattern` in [config file](conf/protocol/R2CLIP.config)) and add them to `fastq_1` headers and are then processed as regular single-end reads.
+- `soniCLIP` only uses `fastq_1`
+
+
+#### iCLIP
+For `iCLIP` protocol, the following columns (in csv) is expected:
+
+|fastq|barcode|
+|------|-------|
+|/path/to/run1.fastq.gz| /path/to/run1_barcode.fa|
+
+- `fastq` column contains the path to the raw, un-demultiplexed fastq files.
+- `barcode` column contains the path to the fasta file with barcodes for demultiplex
+
+`barcode` fasta file format example:
+```
+>sample_1
+NNNNATATATATNN
+>sample_2
+NNNNCGCGCGCGNN
+```
+[flexbar](https://github.com/seqan/flexbar) is  used for demultiplexing iCLIP data based on the provided barcodes with corresponding header as sample name. UMIs (`N`s in the sequences) are extracted from the reads during demultiplexing and added to fastq header.
+
+### Running the workflow
 Given below are example commands to run the workflow with data from supported CLIP protocols.
 
-### eCLIP with human genome (hg38) on SLURM
+#### eCLIP with human genome (hg38) on SLURM
 ```bash
 # -bg to run in background
 nextflow -bg run main.nf -profile slurm,eCLIP,hsa \
@@ -75,7 +110,7 @@ nextflow -bg run main.nf -profile slurm,eCLIP,hsa \
     -with-timeline -with-report -with-trace
 ```
 
-### iCLIP with human genome (hg38) on SLURM
+#### iCLIP with human genome (hg38) on SLURM
 ```bash
 nextflow -bg run main.nf -profile slurm,iCLIP,hsa \
     --input /path/to/sample_sheet.csv \
@@ -84,21 +119,21 @@ nextflow -bg run main.nf -profile slurm,iCLIP,hsa \
     -with-timeline -with-report -with-trace
 ```
 
-### R2-CLIP with human genome (hg38) on SLURM without rRNA filtering
+#### R2-CLIP with human genome (hg38) on SLURM without rRNA filtering
 ```bash
 nextflow -bg run main.nf -profile slurm,R2CLIP,hsa \
-    --rRNA_trim false \
     --input /path/to/sample_sheet.csv \
+    --rRNA_trim false \
     -output-dir /path/to/output \
     -work-dir /path/to/work \
     -with-timeline -with-report -with-trace
 ```
 
-### soniCLIP with human genome (hg38) on SLURM with custom Shoji paramters
+#### soniCLIP with human genome (hg38) on SLURM with custom Shoji paramters
 ```bash
 nextflow -bg run main.nf -profile slurm,soniCLIP,hsa \
-    --shoji.aln_len 30 --shoji.aln_frac 0.85 --shoji.n_aln 5 \
     --input /path/to/sample_sheet.csv \
+    --shoji.aln_len 30 --shoji.aln_frac 0.85 --shoji.n_aln 5 \
     -output-dir /path/to/output \
     -work-dir /path/to/work \
     -with-timeline -with-report -with-trace
