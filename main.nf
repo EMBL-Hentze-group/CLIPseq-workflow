@@ -7,18 +7,14 @@ include {R2CLIP_extract} from './modules/umi_tools.nf'
 include {QC_WRAPPER as QC} from './subworkflows/qc.nf'
 include {SOURMASH_WRAPPER as SOURMASH} from './subworkflows/sourmash.nf'
 // read stats
-include {
-    stats as stats_raw
-    } from './modules/seqkit.nf'
+include {stats as stats_raw} from './modules/seqkit.nf'
 // Trim 
 include {
     FASTP
     FASTP_2STEP
-} from './subworkflows/fastp.nf'
+    } from './subworkflows/fastp.nf'
 include {CUTADAPT} from './subworkflows/cutadapt.nf'
-include {
-    CUTADAPT_2STEP
-} from './subworkflows/cutadapt_2step.nf'
+include {CUTADAPT_2STEP} from './subworkflows/cutadapt_2step.nf'
 // BBDUK
 include {BBDUK} from './subworkflows/bbduk.nf'
 // STAR align
@@ -35,7 +31,10 @@ include {TRACKS} from './subworkflows/tracks.nf'
 // kraken2
 include {KRAKEN2} from './subworkflows/kraken2.nf'
 // combine stats
-include {sample_stats; compile_stats} from './modules/stats.nf'
+include {
+    sample_stats
+    compile_stats
+    } from './modules/stats.nf'
 
 nextflow.enable.dsl=2
 if( nextflow.version < ' 25.10.0' ) {
@@ -60,14 +59,14 @@ workflow {
     main:
         ch_demux_qc = Channel.empty()
         if(params.demultiplex){
-            // assuming that input is iCLIP, where umis and sample barcodes are mixed
+            // assuming that input is raw iCLIP, where umis and sample barcodes are mixed
             ch_init = Channel
                 .fromList(samplesheetToList(params.input, "./assets/schema_iclip.json"))
             ch_demux = DEMULTIPLEX(ch_init, "iCLIP", params.min_read_length, params.flexbar.params)
             ch_data = ch_demux.fastq
             ch_demux_qc = ch_demux.qc
         }else if(params.r2_clip){
-            // assuming that input is R2-CLIP data, all/part of of read2 is umi, and typically 8bp long
+            // assuming that input is R2-CLIP data, all/part of read2 is umi, and typically 8bp long
             // see parameter bc_pattern
             ch_init = Channel.fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
             ch_preprocess = R2CLIP_extract(ch_init, params.bc_pattern)
@@ -76,7 +75,7 @@ workflow {
                 return [ sample, false, [fastq]]
             }    
         }else{
-            // iCLIP or soniCLIP
+            // eCLIP or demultiplexed iCLIP or soniCLIP
             ch_data = Channel
             .fromList(samplesheetToList(params.input, "./assets/schema_input.json"))
             .map {
