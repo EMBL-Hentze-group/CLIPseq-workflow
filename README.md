@@ -59,7 +59,7 @@ Nextflow version(s) tested:
 - [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
 - [`25.10.1`](https://github.com/nextflow-io/nextflow/releases/tag/v25.10.1)
 
-:heavy_exclamation_mark: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
+:warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
 
 
 ### Sample sheet format
@@ -116,7 +116,7 @@ providers {
 }
 ```
 
-:heavy_exclamation_mark: Make sure to keep your PAT secure and do not share it publicly. Test the access before running the workflow.
+:warning: Make sure to keep your PAT secure and do not share it publicly. Test the access before running the workflow.
 
 Given below are example commands to run the workflow with data from supported CLIP protocols. Before that, pull the latest version of the workflow:
 
