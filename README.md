@@ -2,7 +2,7 @@
 
 This is a Nextflow workflow for processing CLIP-seq data. This workflow is designed to support multiple CLIP protocols
 
-## Shoji branch
+#### Shoji branch
 run shoji for downstream processing and crosslink site extraction on aligned BAM files.
 
 ## Workflow steps:
@@ -166,3 +166,6 @@ nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
     -work-dir /path/to/work \
     -with-timeline -with-report -with-trace
 ```
+
+#### Complete run
+See this [shell script](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission/-/blob/R2CLIP_benchmark/submission_scripts/sbatch_nextflow_benchmark_K562_run1.sh) in repo [clip-seq-nextflow-submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission), branch R2CLIP_benchmark for an up-to-date complete example of running the workflow on R2-CLIP data.
