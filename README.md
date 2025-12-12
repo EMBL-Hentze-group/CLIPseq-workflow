@@ -59,14 +59,14 @@ Nextflow version(s) tested:
 - [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
 - [`25.10.1`](https://github.com/nextflow-io/nextflow/releases/tag/v25.10.1)
 
-:warning: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
+:heavy_exclamation_mark: on EMBL HPC, make sure that the shell is clean, ie no conda/mamba paths are set, as this can interefere with JRE, giving weird errors.
 
-For example submission scripts to run the pipeline, see repository [Clip-seq Nextflow Submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission) and make sure to browse to the branches in the repository.
 
 ### Sample sheet format
 
 This workflow uses [nf-schema](https://nextflow-io.github.io/nf-schema/latest/) plugin and the supported sample sheet format.
 
+<a id="default"></a>
 #### eCLIP, R2-CLIP and soniCLIP
 For `eCLIP`, `R2-CLIP` and `soniCLIP` protocols, the following columns (in csv) is expected:
 |sample|fastq_1|fastq_2|
@@ -95,7 +95,9 @@ NNNNATATATATNN
 >sample_2
 NNNNCGCGCGCGNN
 ```
-[flexbar](https://github.com/seqan/flexbar) is  used for demultiplexing iCLIP data based on the provided barcodes with corresponding header as sample name. UMIs (`N`s in the sequences) are extracted from the reads during demultiplexing and added to fastq header.
+:information_source: [flexbar](https://github.com/seqan/flexbar) is  used for demultiplexing iCLIP data based on the provided barcodes with corresponding header as sample name. UMIs (`N`s in the sequences) are extracted from the reads during demultiplexing and added to fastq header.
+
+:information_source: iCLIP fastq files that are already processed (demultiplexed and UMI extracted) can also be provided, using the same sample sheet format as for eCLIP/R2-CLIP/soniCLIP (with `sample`, `fastq_1` columns) ([see section eCLIP, R2-CLIP and soniCLIP](#default)).
 
 ### Running the workflow
 
@@ -114,9 +116,13 @@ providers {
 }
 ```
 
-:warning: Make sure to keep your PAT secure and do not share it publicly. Test the access before running the workflow.
+:heavy_exclamation_mark: Make sure to keep your PAT secure and do not share it publicly. Test the access before running the workflow.
 
-Given below are example commands to run the workflow with data from supported CLIP protocols.
+Given below are example commands to run the workflow with data from supported CLIP protocols. Before that, pull the latest version of the workflow:
+
+```bash
+nextflow pull https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git
+```
 
 #### eCLIP with human genome (hg38) on SLURM
 ```bash
