@@ -95,6 +95,6 @@ process mergeReports{
     script:
     def inputs = reports.join(" ")
     """
-    kraken_report_aggregator --nodes ${nodes} --names ${names} --output ${stage}_merged_kraken2_report.txt ${inputs}
+    kraken_report_aggregator --nodes ${nodes} --names ${names} --out ${stage}_merged_kraken2_report.txt ${inputs}
     """
 }
