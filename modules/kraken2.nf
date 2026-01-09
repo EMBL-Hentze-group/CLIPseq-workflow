@@ -76,3 +76,25 @@ process combineMpa{
     combine_mpa.py -i ${inputs} -o ${stage}_combined_kraken2_mpa.txt
     """
 }
+
+process mergeReports{
+    label "process_low"
+    tag "${stage}"
+
+    container params.singularity.stats
+
+    input:
+    path(reports)
+    path(nodes)
+    path(names)
+    val stage
+
+    output:
+    path("${stage}_merged_kraken2_report.txt"), emit: merged
+
+    script:
+    def inputs = reports.join(" ")
+    """
+    kraken_report_aggregator --nodes ${nodes} --names ${names} --output ${stage}_merged_kraken2_report.txt ${inputs}
+    """
+}
