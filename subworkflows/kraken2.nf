@@ -16,12 +16,15 @@ include {
     multiqc as multiqc_F;
     multiqc as multiqc_R;
  } from '../modules/multiqc.nf'
+
 workflow KRAKEN2{
     take:
     fastqs
     db
     kraken2_params
     report2mpa_params
+    nodes
+    names
     sketch_params
     abund
     compare_K
@@ -31,6 +34,7 @@ workflow KRAKEN2{
     kraken2_out = kraken2(fastqs, db, kraken2_params, stage)
     mpa_out = kraken2Mpa(kraken2_out.report, report2mpa_params, stage)
     combined_mpa = combineMpa(mpa_out.mpa.collect(), stage)
+    merged_reports = mergeReports(kraken2_out.report.map{it[1]}.collect(), nodes, names, stage)
     // SOURMASH
     sourmash_classified = SOURMASH_CLASSIFIED(kraken2_out.classified, sketch_params, abund, compare_K, "contamination_known")
     sourmash_unclassified = SOURMASH_UNCLASSIFIED(kraken2_out.unclassified, sketch_params, abund, compare_K, "contamination_unknown")
@@ -45,7 +49,9 @@ workflow KRAKEN2{
     unclassified = kraken2_out.unclassified
     report = kraken2_out.report.map{it[1]}.collect()|
                 merge(mpa_out.mpa.collect())|
-                merge(combined_mpa.mpa_report.collect())|merge(mqc_report.multiqc)
+                merge(combined_mpa.mpa_report.collect())|
+                merge(mqc_report.multiqc)|
+                merge(merged_reports.merged)
     read_stats =  kraken2_out.report.map{
         sample, report -> [sample, "kraken2", report]
     }
