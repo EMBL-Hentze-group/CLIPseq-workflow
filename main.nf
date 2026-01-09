@@ -165,7 +165,8 @@ workflow {
         ch_tracks = TRACKS(ch_counts.sites, params.tracks.genome, params.tracks.params)
         // Check contamination for unmapped reads with kraken2
         ch_kraken2 = KRAKEN2(ch_star.unmapped, params.kraken2.db, params.kraken2.kraken2_params, 
-                        params.kraken2.mpa_params, params.sourmash.sketch, params.sourmash.abund, 
+                        params.kraken2.mpa_params, params.kraken2.nodes, params.kraken2.names,
+                        params.sourmash.sketch, params.sourmash.abund, 
                         params.sourmash.comparison_K, "unmapped")
         // concatenate alignment and optionally dedup stats and kraken classification to read stats
         ch_all_stats = ch_read_stats.concat(ch_star.read_stats, ch_kraken2.read_stats).map{
