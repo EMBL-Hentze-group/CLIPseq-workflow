@@ -2,6 +2,7 @@ include {
     kraken2
     kraken2Mpa
     combineMpa
+    mergeReports
  } from '../modules/kraken2.nf'
 
 include {
