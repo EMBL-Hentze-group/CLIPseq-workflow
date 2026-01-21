@@ -47,7 +47,7 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 
 ### Genomes:
 - [x] [hsa (hg38)](https://www.gencodegenes.org/human/release_42.html)
-- [ ] [hsa (rRNA genome)](https://doi.org/10.1016/j.jbc.2023.104766)
+- [x] [hsa (rRNA genome)](https://doi.org/10.1016/j.jbc.2023.104766)
 - [ ] rno
 
 
