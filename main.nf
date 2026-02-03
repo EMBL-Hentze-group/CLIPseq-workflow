@@ -229,89 +229,90 @@ workflow {
 output{
     // QC
     raw_qc { 
-        path params.out.QC.raw
+        path "${params.qc_dir}/raw"
     }
     trim_qc {
-        path params.out.QC.trim
+        path "${params.qc_dir}/trim"
     }
     rRNA_qc { 
-        path params.out.QC.rRNA
+        path "${params.qc_dir}/rRNA_trim"
     }
     kraken2_qc {
-        path params.out.QC.kraken2
+        path "${params.qc_dir}/Kraken2"
     }
     // SOURMASH
     raw_sourmash {
-        path params.out.Sourmash.raw
+        path "${params.sourmash_dir}/raw"
     }
     
     trim_sourmash {
-        path params.out.Sourmash.trim
+        path "${params.sourmash_dir}/trim"
     }
     rRNA_sourmash {
-        path params.out.Sourmash.rRNA
+        path "${params.sourmash_dir}/rRNA_trim"
     }
     align_sourmash {
-        path params.out.Sourmash.align
+        path "${params.sourmash_dir}/align"
     }
     kraken2_sourmash {
-        path params.out.Sourmash.kraken2
+        path "${params.sourmash_dir}/kraken2"
     }
     // reads and stats
     trim_fq {
-        path params.out.Fastq.trim
+        path "${params.fastq_dir}/trim"
     }
     trim_report {
-        path params.out.Fastq.trim
+        path "${params.fastq_dir}/trim"
     }
     rRNA_fq {
-        path params.out.Fastq.rRNA
+        path "${params.fastq_dir}/rRNA_trim"
     }
     rRNA_report {
-        path params.out.Fastq.rRNA
+        path "${params.fastq_dir}/rRNA_trim"
     }
     // alignments
     align_bam {
-        path params.out.Align.main
+        path "${params.align_dir}/main"
     }
     align_stats {
-        path params.out.Align.main
+        path "${params.align_dir}/main"
     }
     align_mapped {
-        path params.out.Fastq.mapped
+        path "${params.align_dir}/mapped"
     }
     align_unmapped {
-        path params.out.Fastq.unmapped
+        path "${params.align_dir}/unmapped"
     }
     align_multimapped {
-        path params.out.Fastq.multimapped
+        path "${params.align_dir}/multimapped"
+    }
+    // Annotation
+    annotation {
+        path "${params.annotation_dir}/"
     }
     // Shoji
-    annotation {
-        path params.out.Shoji.annotation
-    }
     sites {
-        path params.out.Shoji.sites
+        path "${params.shoji_dir}/sites"
     }
     counts {
-        path params.out.Shoji.counts
+        path "${params.shoji_dir}/counts"
     }
     matrices {
-        path params.out.Shoji.matrices
+        path "${params.shoji_dir}/matrix"
     }
     // Tracks
     bigwigs {
-        path params.out.Shoji.tracks
+        path "${params.shoji_dir}/tracks"
     }
     // Contamination check with kraken2
     kraken2_fqs {
-        path params.out.Kraken2.main
+        path "${params.kraken2_dir}"
     }
     kraken2_report {
-        path params.out.Kraken2.main
+        path "${params.kraken2_dir}/report"
     }
     // stats
     combined_stats {
-        path params.out.Stats.main 
+        path "${params.stats_dir}/"
     }
 }
