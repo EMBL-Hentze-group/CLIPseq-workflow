@@ -1,1 +1,0 @@
-This directory contains config for output directory structure
