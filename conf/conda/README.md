@@ -1,0 +1,1 @@
+This directory contains conda environment yaml files used in CLIP-seq analysis

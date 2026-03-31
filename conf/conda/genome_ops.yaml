@@ -1,0 +1,10 @@
+name: genome_ops
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bedtools=2.31.0-0
+  - bedops=2.4.41-0
+  - ucsc-bedgraphtobigwig=481-0
+  - ucsc-bedsort=469-0
+

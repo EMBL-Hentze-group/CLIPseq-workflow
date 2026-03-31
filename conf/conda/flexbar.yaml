@@ -1,0 +1,6 @@
+name: flexbar
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - flexbar=3.5.0-11

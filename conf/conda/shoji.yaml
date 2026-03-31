@@ -1,0 +1,8 @@
+name: shoji
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.12
+  - pip
+  - pip:
+    - shoji==0.41.2

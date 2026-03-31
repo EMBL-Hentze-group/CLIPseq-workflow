@@ -1,0 +1,7 @@
+name: trim
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - fastp=1.0.1-0
+  - cutadapt=5.1-0
