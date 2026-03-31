@@ -50,6 +50,17 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 - [x] [hsa (rRNA genome)](https://doi.org/10.1016/j.jbc.2023.104766)
 - [ ] rno
 
+### Run environments
+- [x] [apptainer](https://www.nextflow.io/docs/edge/container.html#apptainer): see [config](conf/containers/singularity.config) and [profile](./nextflow.config)
+- [x] [conda](https://www.nextflow.io/docs/latest/conda.html): see [config](conf/conda/conda.config) and [profile](./nextflow.config)
+
+### Using profiles
+
+see [nextflow.config](./nextflow.config) section `profiles` for the complete list of profiles
+
+`nextflow run -profile slurm,apptainer,eCLIP,hg38 ...` will run the worflow on EMBL HPC using apptainer images, for eCLIP dataset with hg38 genome alignment
+
+`nextflow run -profile slurm,conda,eCLIP,hg38 ...` will run the worflow on EMBL HPC using conda environments, for eCLIP dataset with hg38 genome alignmen
 
 ## Workflow
 
@@ -109,7 +120,7 @@ an example scm fill will look like:
 ```bash
 providers {
   gitlab {
-    user = 'username'
+    user = 'username' # EMBL gitlab username
     password = 'glpat-access-token-here'
     server = 'https://git.embl.org/'
   }
@@ -124,11 +135,21 @@ Given below are example commands to run the workflow with data from supported CL
 nextflow pull https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git
 ```
 
-#### eCLIP with human genome (hg38) on SLURM
+#### eCLIP with human genome (hg38) on SLURM using apptainer
 ```bash
 # -bg to run in background
 nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
-    -profile slurm,eCLIP,hsa \
+    -profile slurm,apptainer,eCLIP,hsa \
+    --input /path/to/sample_sheet.csv \
+    -output-dir /path/to/output \
+    -work-dir /path/to/work \
+    -with-timeline -with-report -with-trace
+```
+#### eCLIP with human genome (hg38) on SLURM using conda
+```bash
+# -bg to run in background
+nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
+    -profile slurm,conda,eCLIP,hsa \
     --input /path/to/sample_sheet.csv \
     -output-dir /path/to/output \
     -work-dir /path/to/work \
@@ -168,4 +189,6 @@ nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
 ```
 
 #### Complete run
-See this [shell script](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission/-/blob/R2CLIP_benchmark/submission_scripts/sbatch_nextflow_benchmark_K562_run1.sh) in repo [clip-seq-nextflow-submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission), branch R2CLIP_benchmark for an up-to-date complete example of running the workflow on R2-CLIP data.
+See this [shell script](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission/-/blob/PKM2_new_params/submission_scripts/sbatch_sonication_new_params_nextflow.sh) in repo [clip-seq-nextflow-submission](https://git.embl.org/grp-hentze/workflows/clip-seq-nextflow-submission), branch R2CLIP_benchmark for an up-to-date complete example of running the workflow on R2-CLIP data.
+
+:warning: this was run before setting up conda environments in this workflow, so profile defined here is the old version of profile: `slurm,soniCLIP,rDNA` where apptainer was the default, but the current version of the profile will be `slurm,apptainer,soniCLIP,rDNA` 
