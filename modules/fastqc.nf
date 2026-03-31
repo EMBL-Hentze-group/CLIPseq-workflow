@@ -3,6 +3,7 @@ process fastqc {
     tag "${sample}"
 
     container params.singularity.qc
+    conda params.conda.qc
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -25,6 +26,7 @@ process fastqc_demux{
     label "process_high"
 
     container params.singularity.qc
+    conda params.conda.qc
     // run fastqc before demultiplexing, files can be large
 
     input:

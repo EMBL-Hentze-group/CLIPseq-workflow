@@ -2,6 +2,7 @@ process demultiplex{
     label "process_high"
 
     container params.singularity.flexbar
+    conda params.conda.flexbar
 
     input:
     tuple path(fastq), path(barcode)

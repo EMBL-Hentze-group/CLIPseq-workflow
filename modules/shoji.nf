@@ -3,6 +3,7 @@ process annotation {
     label "process_low"
 
     container params.singularity.shoji
+    conda params.conda.shoji
 
     input:
     path gff3
@@ -24,6 +25,7 @@ process createSlidingWindows {
     label "process_medium"
 
     container params.singularity.shoji
+    conda params.conda.shoji
 
     input:
     path(annotation, arity: 1..2) // expect either the annotation file alone or with its index
@@ -45,6 +47,7 @@ process extract {
     tag "shoji extract ${sample}"
 
     container params.singularity.shoji
+    conda params.conda.shoji
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
@@ -72,6 +75,7 @@ process count {
     label "process_medium"
 
     container params.singularity.shoji
+    conda params.conda.shoji
 
     input:
     tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
@@ -91,6 +95,7 @@ process createMatrix {
     label "process_medium"
 
     container params.singularity.shoji
+    conda params.conda.shoji
 
     input:
     path (counts), name: "counts/*"

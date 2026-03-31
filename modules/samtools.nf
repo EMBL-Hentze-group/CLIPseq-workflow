@@ -3,7 +3,7 @@ process sort {
     tag "${sample} ${stage}"
 
     container params.singularity.samtools
-
+    conda params.conda.samtools
     input:
     tuple val(sample), val(paired), path(bam)
     val stage
@@ -22,6 +22,7 @@ process index {
     tag "${sample}"
 
     container params.singularity.samtools
+    conda params.conda.samtools
 
     input:
     tuple val(sample), val(paired), path(bam)
@@ -43,6 +44,7 @@ process fastq {
     min version requires: 1.21
     */
     container params.singularity.samtools
+    conda params.conda.samtools
 
     input:
     tuple val(sample), val(paired), path(bam), path(bai)

@@ -3,6 +3,7 @@ process starAlign {
     tag "${sample} ${stage}"
 
     container params.singularity.star
+    conda params.conda.star
 
     input:
     tuple val(sample), val(paired), path(reads)
@@ -31,7 +32,8 @@ process starAlign2Pass {
     tag "${sample} ${stage}"
 
     container params.singularity.star
-
+    conda params.conda.star
+    
     input:
     tuple val(sample), val(paired), path(reads)
     path genomeDir

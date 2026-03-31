@@ -3,7 +3,7 @@ process cutadapt {
     tag "${sample} ${stage}"
 
     container params.singularity.trim
-
+    conda params.conda.trim
     input:
     tuple val(sample), val(paired), path(fastqs)
     val cut_params

@@ -6,6 +6,7 @@ process sketch {
     tag "${sample} ${stage}"
 
     container params.singularity.sourmash
+    conda params.conda.sourmash
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -29,6 +30,7 @@ process compare {
     tag "${stage}"
 
     container params.singularity.sourmash
+    conda params.conda.sourmash
 
     input:
     path sig
@@ -50,6 +52,7 @@ process sourmashPlot {
     tag "${stage}"
 
     container params.singularity.sourmash
+    conda params.conda.sourmash
 
     input:
     tuple path(npy), path(labels)

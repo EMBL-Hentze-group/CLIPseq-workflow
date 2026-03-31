@@ -3,6 +3,7 @@ process stats {
     tag "${sample} ${stage}"
 
     container params.singularity.seqkit
+    conda params.conda.seqkit
 
     input:
     tuple val(sample), val(paired), path(fastqs)

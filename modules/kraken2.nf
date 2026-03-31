@@ -4,6 +4,7 @@ process kraken2 {
     tag "${sample} ${stage}"
 
     container params.singularity.kraken2
+    conda params.conda.kraken2
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -42,6 +43,7 @@ process kraken2Mpa{
     tag "${sample} ${stage}"
 
     container params.singularity.kraken2
+    conda params.conda.kraken2
 
     input:
     tuple val(sample), path(report)
@@ -62,7 +64,7 @@ process combineMpa{
     tag "${stage}"
 
     container params.singularity.kraken2
-
+    conda params.conda.kraken2
     input:
     path(mpas)
     val stage
@@ -82,6 +84,7 @@ process mergeReports{
     tag "${stage}"
 
     container params.singularity.stats
+    conda params.conda.kraken2
 
     input:
     path(reports)

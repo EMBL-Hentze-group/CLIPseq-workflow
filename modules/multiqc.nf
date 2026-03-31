@@ -3,6 +3,7 @@ process multiqc {
     tag "${stage}"
 
     container params.singularity.qc
+    conda params.conda.qc
 
     input:
     path zip

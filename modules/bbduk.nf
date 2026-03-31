@@ -3,6 +3,7 @@ process bbduk {
     tag "${sample}"
 
     container params.singularity.bbmap
+    conda params.conda.bbmap
 
     input:
     tuple val(sample), val(paired), path(fastqs)

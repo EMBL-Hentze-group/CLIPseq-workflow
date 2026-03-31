@@ -4,6 +4,7 @@ process dedup {
     tag "${sample} ${stage}"
 
     container params.singularity.umi_tools
+    conda params.conda.umi_tools
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
@@ -24,6 +25,7 @@ process extract{
     label "process_single"
 
     container params.singularity.umi_tools
+    conda params.conda.umi_tools
 
     input:
     tuple path(fastq), path(barcode)
@@ -46,6 +48,7 @@ process R2CLIP_extract{
     tag "${sample}"
 
     container params.singularity.umi_tools
+    conda params.conda.umi_tools
 
     input:
     tuple val(sample), path(fastq_1), path(fastq_2)

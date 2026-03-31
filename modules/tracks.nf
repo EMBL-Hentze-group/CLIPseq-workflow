@@ -3,6 +3,7 @@ process bedGraph{
     tag "${sample}"
 
     container params.singularity.genome_ops
+    conda params.conda.genome_ops
 
     input:
     tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
@@ -24,6 +25,7 @@ process bigWig{
     tag "${sample}"
 
     container params.singularity.genome_ops
+    conda params.conda.genome_ops
 
     input:
     tuple val(sample), path(bedGraph)

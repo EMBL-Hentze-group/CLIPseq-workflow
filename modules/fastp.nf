@@ -3,6 +3,7 @@ process fastp {
     tag "${sample} ${stage}"
 
     container params.singularity.trim
+    conda params.conda.trim
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -41,6 +42,7 @@ process trim_demultiplex{
     umi_tools will fail if the reads are shorter than the barcode pattern
     */
     container params.singularity.trim
+    conda params.conda.trim
     
     input:
     tuple path(fastq), path(barcode)
