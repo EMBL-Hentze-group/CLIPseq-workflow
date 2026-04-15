@@ -51,7 +51,7 @@ run shoji for downstream processing and crosslink site extraction on aligned BAM
 - [ ] rno
 
 ### Run environments
-- [x] [apptainer](https://www.nextflow.io/docs/edge/container.html#apptainer): see [config](conf/containers/singularity.config) and [profile](./nextflow.config)
+- [x] [apptainer](https://www.nextflow.io/docs/edge/container.html#apptainer): see [config](conf/containers/apptainer.config) and [profile](./nextflow.config)
 - [x] [conda](https://www.nextflow.io/docs/latest/conda.html): see [config](conf/conda/conda.config) and [profile](./nextflow.config)
 
 ### Using profiles
