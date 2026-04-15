@@ -5,4 +5,4 @@ dependencies:
   - python=3.12.12
   - pip
   - pip:
-    - shoji==0.41.2
+    - shoji==0.44.2
