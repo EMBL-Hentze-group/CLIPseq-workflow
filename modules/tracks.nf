@@ -1,9 +1,14 @@
 process bedGraph{
+    label "BIGWIG"
     label "process_low"
     tag "${sample}"
 
-    container params.singularity.genome_ops
-    conda params.conda.genome_ops
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.genome_ops
+    // conda params.conda.genome_ops
 
     input:
     tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
@@ -21,11 +26,16 @@ process bedGraph{
 }
 
 process bigWig{
+    label "BIGWIG"
     label "process_low"
     tag "${sample}"
 
-    container params.singularity.genome_ops
-    conda params.conda.genome_ops
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.genome_ops
+    // conda params.conda.genome_ops
 
     input:
     tuple val(sample), path(bedGraph)

@@ -1,9 +1,14 @@
 process multiqc {
+    label "MULTIQC"
     label "process_single"
     tag "${stage}"
 
-    container params.singularity.qc
-    conda params.conda.qc
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.qc
+    // conda params.conda.qc
 
     input:
     path zip

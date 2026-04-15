@@ -1,9 +1,14 @@
 process sort {
+    label "SAMTOOLS"
     label "process_low"
     tag "${sample} ${stage}"
 
-    container params.singularity.samtools
-    conda params.conda.samtools
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.samtools
+    // conda params.conda.samtools
     input:
     tuple val(sample), val(paired), path(bam)
     val stage
@@ -18,11 +23,16 @@ process sort {
 }
 
 process index {
+    label "SAMTOOLS"
     label "process_low"
     tag "${sample}"
 
-    container params.singularity.samtools
-    conda params.conda.samtools
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.samtools
+    // conda params.conda.samtools
 
     input:
     tuple val(sample), val(paired), path(bam)
@@ -37,14 +47,19 @@ process index {
 }
 
 process fastq {
+    label "SAMTOOLS"
     label "process_low"
     tag "${sample} ${stage}"
 
     /*
     min version requires: 1.21
     */
-    container params.singularity.samtools
-    conda params.conda.samtools
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.samtools
+    // conda params.conda.samtools
 
     input:
     tuple val(sample), val(paired), path(bam), path(bai)

@@ -2,9 +2,14 @@
 Contains processes that doesn't really fit anywhere else
 */
 process fix_header{
+    label "STATTER"
     label "process_single"
 
-    container params.singularity.stats
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.stats
 
     input:
     path fastq

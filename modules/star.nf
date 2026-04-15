@@ -1,9 +1,14 @@
 process starAlign {
+    label "STAR"
     label "process_high"
     tag "${sample} ${stage}"
 
-    container params.singularity.star
-    conda params.conda.star
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.star
+    // conda params.conda.star
 
     input:
     tuple val(sample), val(paired), path(reads)
@@ -28,11 +33,16 @@ process starAlign {
 }
 
 process starAlign2Pass {
+    label "STAR"
     label "process_high"
     tag "${sample} ${stage}"
 
-    container params.singularity.star
-    conda params.conda.star
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.star
+    // conda params.conda.star
     
     input:
     tuple val(sample), val(paired), path(reads)

@@ -1,9 +1,15 @@
 process cutadapt {
+    label "CUTADAPT"
     label "process_low"
     tag "${sample} ${stage}"
 
-    container params.singularity.trim
-    conda params.conda.trim
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.trim
+    // conda params.conda.trim
+    
     input:
     tuple val(sample), val(paired), path(fastqs)
     val cut_params

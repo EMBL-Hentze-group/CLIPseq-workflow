@@ -1,10 +1,15 @@
 
 process kraken2 {
+    label "KRAKEN2"
     label "process_highmem"
     tag "${sample} ${stage}"
 
-    container params.singularity.kraken2
-    conda params.conda.kraken2
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.kraken2
+    // conda params.conda.kraken2
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -39,11 +44,16 @@ process kraken2 {
 }
 
 process kraken2Mpa{
+    label "KRAKEN2"
     label "process_low"
     tag "${sample} ${stage}"
 
-    container params.singularity.kraken2
-    conda params.conda.kraken2
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.kraken2
+    // conda params.conda.kraken2
 
     input:
     tuple val(sample), path(report)
@@ -60,11 +70,17 @@ process kraken2Mpa{
 }
 
 process combineMpa{
+    label "KRAKEN2"
     label "process_low"
     tag "${stage}"
 
-    container params.singularity.kraken2
-    conda params.conda.kraken2
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.kraken2
+    // conda params.conda.kraken2
+
     input:
     path(mpas)
     val stage
@@ -80,11 +96,16 @@ process combineMpa{
 }
 
 process mergeReports{
+    label "STATTER"
     label "process_low"
     tag "${stage}"
 
-    container params.singularity.stats
-    conda params.conda.kraken2
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.stats
+    // conda params.conda.kraken2
 
     input:
     path(reports)

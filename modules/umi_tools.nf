@@ -1,10 +1,15 @@
 process dedup {
+    label "UMITOOLS"
     label "process_low"
     // TODO fix this later
     tag "${sample} ${stage}"
 
-    container params.singularity.umi_tools
-    conda params.conda.umi_tools
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.umi_tools
+    // conda params.conda.umi_tools
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
@@ -21,11 +26,16 @@ process dedup {
     """
 }
 
-process extract{
+process UMI_extract{
+    label "UMITOOLS"
     label "process_single"
 
-    container params.singularity.umi_tools
-    conda params.conda.umi_tools
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.umi_tools
+    // conda params.conda.umi_tools
 
     input:
     tuple path(fastq), path(barcode)
@@ -44,11 +54,16 @@ process extract{
 }
 
 process R2CLIP_extract{
+    label "UMITOOLS"
     label "process_single"
     tag "${sample}"
 
-    container params.singularity.umi_tools
-    conda params.conda.umi_tools
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.umi_tools
+    // conda params.conda.umi_tools
 
     input:
     tuple val(sample), path(fastq_1), path(fastq_2)

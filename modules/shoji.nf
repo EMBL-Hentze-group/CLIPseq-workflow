@@ -1,9 +1,15 @@
 process annotation {
-    tag "shoji annotation"
+    label "SHOJI"
     label "process_low"
+    tag "shoji annotation"
+    
 
-    container params.singularity.shoji
-    conda params.conda.shoji
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.shoji
+    // conda params.conda.shoji
 
     input:
     path gff3
@@ -21,11 +27,16 @@ process annotation {
 }
 
 process createSlidingWindows {
+    label "SHOJI"
     tag "shoji createSlidingWindows"
     label "process_medium"
 
-    container params.singularity.shoji
-    conda params.conda.shoji
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.shoji
+    // conda params.conda.shoji
 
     input:
     path(annotation, arity: 1..2) // expect either the annotation file alone or with its index
@@ -43,11 +54,16 @@ process createSlidingWindows {
 }
 
 process extract {
+    label "SHOJI"
     label "process_medium"
     tag "shoji extract ${sample}"
 
-    container params.singularity.shoji
-    conda params.conda.shoji
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.shoji
+    // conda params.conda.shoji
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
@@ -71,11 +87,16 @@ process extract {
 }
 
 process count {
+    label "SHOJI"
     tag "shoji count ${sample}"
     label "process_medium"
 
-    container params.singularity.shoji
-    conda params.conda.shoji
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.shoji
+    // conda params.conda.shoji
 
     input:
     tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
@@ -91,11 +112,16 @@ process count {
 }
 
 process createMatrix {
+    label "SHOJI"
     tag "shoji createMatrix"
     label "process_medium"
 
-    container params.singularity.shoji
-    conda params.conda.shoji
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.shoji
+    // conda params.conda.shoji
 
     input:
     path (counts), name: "counts/*"

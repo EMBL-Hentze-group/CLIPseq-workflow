@@ -2,11 +2,16 @@
 // order of execution: SKETCH -> COMPARE -> PLOT
 
 process sketch {
+    label "SOURMASH"
     label "process_low"
     tag "${sample} ${stage}"
 
-    container params.singularity.sourmash
-    conda params.conda.sourmash
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.sourmash
+    // conda params.conda.sourmash
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -26,11 +31,16 @@ process sketch {
 }
 
 process compare {
+    label "SOURMASH"
     label "process_medium"
     tag "${stage}"
 
-    container params.singularity.sourmash
-    conda params.conda.sourmash
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.sourmash
+    // conda params.conda.sourmash
 
     input:
     path sig
@@ -48,11 +58,16 @@ process compare {
 }
 
 process sourmashPlot {
+    label "SOURMASH"
     label "process_single"
     tag "${stage}"
 
-    container params.singularity.sourmash
-    conda params.conda.sourmash
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.sourmash
+    // conda params.conda.sourmash
 
     input:
     tuple path(npy), path(labels)

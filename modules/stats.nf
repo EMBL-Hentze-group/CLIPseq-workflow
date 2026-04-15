@@ -1,9 +1,14 @@
 
 process align_stats_STAR {
+    label "STATTER"
     label "process_single"
     tag "${sample} ${stage}"
 
-    container params.singularity.stats
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.stats
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
@@ -19,10 +24,15 @@ process align_stats_STAR {
 }
 
 process sample_stats {
+    label "STATTER"
     label "process_single"
     tag "${sample}"
 
-    container params.singularity.stats
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.stats
 
     input:
     tuple val(sample), val(stage_stat_map), path(files)
@@ -62,9 +72,14 @@ process sample_stats {
 }
 
 process compile_stats {
+    label "STATTER"
     label "process_single"
 
-    container params.singularity.stats
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.stats
 
     input:
     path(stats)

@@ -1,9 +1,14 @@
 process fastp {
+    label "FASTP"
     label "process_low"
     tag "${sample} ${stage}"
 
-    container params.singularity.trim
-    conda params.conda.trim
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.trim
+    // conda params.conda.trim
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -36,13 +41,18 @@ process fastp {
 }
 
 process trim_demultiplex{
+    label "FASTP"
     label "process_high"
     /*
     trim reads before demultiplexing using umi_tools
     umi_tools will fail if the reads are shorter than the barcode pattern
     */
-    container params.singularity.trim
-    conda params.conda.trim
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.trim
+    // conda params.conda.trim
     
     input:
     tuple path(fastq), path(barcode)

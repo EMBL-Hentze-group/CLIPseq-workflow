@@ -1,9 +1,14 @@
 process bbduk {
+    label "BBDUK"
     label "process_high"
     tag "${sample}"
 
-    container params.singularity.bbmap
-    conda params.conda.bbmap
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.bbmap
+    // conda params.conda.bbmap
 
     input:
     tuple val(sample), val(paired), path(fastqs)

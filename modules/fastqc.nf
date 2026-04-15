@@ -1,9 +1,14 @@
 process fastqc {
+    label "FASTQC"
     label "process_low"
     tag "${sample}"
 
-    container params.singularity.qc
-    conda params.conda.qc
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.qc
+    // conda params.conda.qc
 
     input:
     tuple val(sample), val(paired), path(fastqs)
@@ -23,11 +28,17 @@ process fastqc {
 
 
 process fastqc_demux{
+    label "FASTQC"
     label "process_high"
 
-    container params.singularity.qc
-    conda params.conda.qc
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.qc
+    // conda params.conda.qc
     // run fastqc before demultiplexing, files can be large
+    
 
     input:
     tuple path(fastq), path(barcode)

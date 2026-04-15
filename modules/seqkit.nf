@@ -1,9 +1,14 @@
 process stats {
+    label "SEQKIT"
     label "process_low"
     tag "${sample} ${stage}"
 
-    container params.singularity.seqkit
-    conda params.conda.seqkit
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.seqkit
+    // conda params.conda.seqkit
 
     input:
     tuple val(sample), val(paired), path(fastqs)

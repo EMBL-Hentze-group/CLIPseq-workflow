@@ -1,8 +1,13 @@
 process demultiplex{
+    label "FLEXBAR"
     label "process_high"
 
-    container params.singularity.flexbar
-    conda params.conda.flexbar
+    /*
+    see conf/conda/apptainer.config for singularity params and
+        conf/conda/conda.config for conda params
+    */
+    // container params.singularity.flexbar
+    // conda params.conda.flexbar
 
     input:
     tuple path(fastq), path(barcode)
