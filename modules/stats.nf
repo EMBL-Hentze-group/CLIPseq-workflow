@@ -79,7 +79,6 @@ process compile_stats {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.stats
 
     input:
     path(stats)

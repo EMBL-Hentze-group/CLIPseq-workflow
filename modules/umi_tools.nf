@@ -8,7 +8,6 @@ process dedup {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.umi_tools
     // conda params.conda.umi_tools
 
     input:
@@ -34,7 +33,6 @@ process UMI_extract{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.umi_tools
     // conda params.conda.umi_tools
 
     input:
@@ -62,7 +60,6 @@ process R2CLIP_extract{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.umi_tools
     // conda params.conda.umi_tools
 
     input:

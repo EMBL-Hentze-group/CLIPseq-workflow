@@ -7,7 +7,6 @@ process multiqc {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.qc
     // conda params.conda.qc
 
     input:

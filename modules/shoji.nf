@@ -8,7 +8,6 @@ process annotation {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.shoji
     // conda params.conda.shoji
 
     input:
@@ -35,7 +34,6 @@ process createSlidingWindows {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.shoji
     // conda params.conda.shoji
 
     input:
@@ -62,7 +60,6 @@ process extract {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.shoji
     // conda params.conda.shoji
 
     input:
@@ -95,7 +92,6 @@ process count {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.shoji
     // conda params.conda.shoji
 
     input:
@@ -120,7 +116,6 @@ process createMatrix {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.shoji
     // conda params.conda.shoji
 
     input:

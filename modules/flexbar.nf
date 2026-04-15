@@ -6,7 +6,6 @@ process demultiplex{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.flexbar
     // conda params.conda.flexbar
 
     input:

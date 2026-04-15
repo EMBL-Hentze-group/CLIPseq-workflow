@@ -7,7 +7,6 @@ process cutadapt {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.trim
     // conda params.conda.trim
     
     input:

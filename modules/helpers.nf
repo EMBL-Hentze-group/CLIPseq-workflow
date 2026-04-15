@@ -9,8 +9,7 @@ process fix_header{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.stats
-
+    
     input:
     path fastq
 

@@ -7,7 +7,6 @@ process sort {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.samtools
     // conda params.conda.samtools
     input:
     tuple val(sample), val(paired), path(bam)
@@ -31,7 +30,6 @@ process index {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.samtools
     // conda params.conda.samtools
 
     input:
@@ -53,12 +51,10 @@ process fastq {
 
     /*
     min version requires: 1.21
-    */
-    /*
+
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.samtools
     // conda params.conda.samtools
 
     input:

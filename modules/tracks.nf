@@ -7,7 +7,6 @@ process bedGraph{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.genome_ops
     // conda params.conda.genome_ops
 
     input:
@@ -34,7 +33,6 @@ process bigWig{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.genome_ops
     // conda params.conda.genome_ops
 
     input:

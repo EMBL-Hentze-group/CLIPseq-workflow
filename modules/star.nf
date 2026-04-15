@@ -7,7 +7,6 @@ process starAlign {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.star
     // conda params.conda.star
 
     input:
@@ -41,7 +40,6 @@ process starAlign2Pass {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.star
     // conda params.conda.star
     
     input:

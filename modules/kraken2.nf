@@ -8,7 +8,6 @@ process kraken2 {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.kraken2
     // conda params.conda.kraken2
 
     input:
@@ -52,7 +51,6 @@ process kraken2Mpa{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.kraken2
     // conda params.conda.kraken2
 
     input:
@@ -78,7 +76,6 @@ process combineMpa{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.kraken2
     // conda params.conda.kraken2
 
     input:
@@ -104,7 +101,6 @@ process mergeReports{
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.stats
     // conda params.conda.kraken2
 
     input:

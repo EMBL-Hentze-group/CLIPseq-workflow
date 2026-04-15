@@ -7,7 +7,6 @@ process stats {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.seqkit
     // conda params.conda.seqkit
 
     input:

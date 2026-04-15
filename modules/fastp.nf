@@ -7,7 +7,6 @@ process fastp {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.trim
     // conda params.conda.trim
 
     input:
@@ -44,14 +43,13 @@ process trim_demultiplex{
     label "FASTP"
     label "process_high"
     /*
+    
     trim reads before demultiplexing using umi_tools
     umi_tools will fail if the reads are shorter than the barcode pattern
-    */
-    /*
+
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.trim
     // conda params.conda.trim
     
     input:

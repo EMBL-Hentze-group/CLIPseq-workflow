@@ -10,7 +10,6 @@ process sketch {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.sourmash
     // conda params.conda.sourmash
 
     input:
@@ -39,7 +38,6 @@ process compare {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.sourmash
     // conda params.conda.sourmash
 
     input:
@@ -66,7 +64,6 @@ process sourmashPlot {
     see conf/conda/apptainer.config for singularity params and
         conf/conda/conda.config for conda params
     */
-    // container params.singularity.sourmash
     // conda params.conda.sourmash
 
     input:
