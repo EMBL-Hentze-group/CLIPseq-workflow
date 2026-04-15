@@ -159,7 +159,7 @@ nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
 #### iCLIP with human genome (hg38) on SLURM
 ```bash
 nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
-    -profile slurm,iCLIP,hsa \
+    -profile slurm,apptainer,iCLIP,hsa \
     --input /path/to/sample_sheet.csv \
     -output-dir /path/to/output \
     -work-dir /path/to/work \
@@ -169,7 +169,7 @@ nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
 #### R2-CLIP with human genome (hg38) on SLURM without rRNA filtering
 ```bash
 nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
-    -profile slurm,R2CLIP,hsa \
+    -profile slurm,apptainer,R2CLIP,hsa \
     --input /path/to/sample_sheet.csv \
     --rRNA_trim false \
     -output-dir /path/to/output \
@@ -180,7 +180,7 @@ nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
 #### soniCLIP with human genome (hg38) on SLURM with custom Shoji paramters
 ```bash
 nextflow -bg run https://git.embl.org/grp-hentze/workflows/clip-seq-nf.git \
-    -profile slurm,soniCLIP,hsa \
+    -profile slurm,apptainer,soniCLIP,hsa \
     --input /path/to/sample_sheet.csv \
     --shoji.aln_len 30 --shoji.aln_frac 0.85 --shoji.n_aln 5 \
     -output-dir /path/to/output \
