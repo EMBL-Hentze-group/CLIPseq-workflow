@@ -18,6 +18,6 @@ process fix_header{
 
     script:
     """
-    statter fix-header -i ${fastq} -o header_fixed_${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}.fastq.gz
+    ngs-statter fix-header -i ${fastq} -o header_fixed_${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}.fastq.gz
     """
 }

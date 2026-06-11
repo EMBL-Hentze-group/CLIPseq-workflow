@@ -20,6 +20,6 @@ process demultiplex{
     script:
     def params = flexbar_params + " -t ${prefix} -m ${min_read_length}"
     """
-    flexbar -n ${task.cpus} -r ${fastq} -b ${barcode} -z GZ -O flexbar.log ${params}
+    ngs-statter flexbar -n ${task.cpus} -r ${fastq} -b ${barcode} -z GZ -O flexbar.log ${params}
     """
 }

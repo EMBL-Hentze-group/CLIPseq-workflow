@@ -115,6 +115,6 @@ process mergeReports{
     script:
     def inputs = reports.join(" ")
     """
-    statter collect-reports --nodes ${nodes} --names ${names} --out ${stage}_merged_kraken2_report.txt ${inputs}
+    ngs-statter collect-reports --nodes ${nodes} --names ${names} --out ${stage}_merged_kraken2_report.txt ${inputs}
     """
 }

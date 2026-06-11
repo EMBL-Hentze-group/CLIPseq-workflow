@@ -19,7 +19,7 @@ process align_stats_STAR {
     
     script:
     """
-    statter STAR --bam ${bam} --out-json ${sample}_${stage}_stats.json
+    ngs-statter STAR --bam ${bam} --out-json ${sample}_${stage}_stats.json
     """
 }
 
@@ -67,7 +67,7 @@ process sample_stats {
     def cmd_args = args.join(" ")
     """
     echo $cmd_args
-    statter sample-stats -n ${sample} -o ${sample}_all_stats.json ${cmd_args}
+    ngs-statter sample-stats -n ${sample} -o ${sample}_all_stats.json ${cmd_args}
     """
 }
 
@@ -88,6 +88,6 @@ process compile_stats {
 
     script:
     """
-    statter compile-stats -o all_samples_combined_stats.csv ${stats.join(' ')}
+    ngs-statter compile-stats -o all_samples_combined_stats.csv ${stats.join(' ')}
     """
 }
