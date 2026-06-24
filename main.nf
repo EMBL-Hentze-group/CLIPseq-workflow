@@ -272,19 +272,19 @@ output{
     }
     // alignments
     align_bam {
-        path "${params.align_dir}/main"
+        path "${params.align_dir}/alignment"
     }
     align_stats {
-        path "${params.align_dir}/main"
+        path "${params.align_dir}/alignment"
     }
     align_mapped {
-        path "${params.align_dir}/mapped"
+        path "${params.align_dir}/mapped_fq"
     }
     align_unmapped {
-        path "${params.align_dir}/unmapped"
+        path "${params.align_dir}/unmapped_fq"
     }
     align_multimapped {
-        path "${params.align_dir}/multimapped"
+        path "${params.align_dir}/multimapped_fq"
     }
     // Annotation
     annotation {

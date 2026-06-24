@@ -43,7 +43,7 @@ process kraken2 {
 }
 
 process kraken2Mpa{
-    label "KRAKEN2"
+    label "KRAKENTOOLS"
     label "process_low"
     tag "${sample} ${stage}"
 
@@ -68,7 +68,7 @@ process kraken2Mpa{
 }
 
 process combineMpa{
-    label "KRAKEN2"
+    label "KRAKENTOOLS"
     label "process_low"
     tag "${stage}"
 
@@ -115,6 +115,6 @@ process mergeReports{
     script:
     def inputs = reports.join(" ")
     """
-    ngs-statter collect-reports --nodes ${nodes} --names ${names} --out ${stage}_merged_kraken2_report.txt ${inputs}
+    ngs-statter collect-reports --nodes ${nodes} --names ${names} --out-csv ${stage}_merged_kraken2_report.txt ${inputs}
     """
 }

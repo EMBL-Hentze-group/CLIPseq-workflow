@@ -1,3 +1,4 @@
-**This config is mainly for internal runs**
+The [apptainer config file](./apptainer.config) sources container images from
 
-This directory contains container specific configs, ie paths to containers and **should not** be made public
+ - [biocontainers project](https://quay.io/organization/biocontainers) and
+ - [custom generated containers](https://github.com/orgs/EMBL-Hentze-group/packages)

@@ -1,5 +1,5 @@
 process bedGraph{
-    label "BIGWIG"
+    label "BEDGRAPH"
     label "process_low"
     tag "${sample}"
 
@@ -19,8 +19,7 @@ process bedGraph{
 
     script:
     """
-    bedtools genomecov -i ${sites[0]} -g ${genome} ${bed_params} > ${sample}.bg &&
-    bedSort ${sample}.bg ${sample}.bg
+    bedtools genomecov -i ${sites[0]} -g ${genome} ${bed_params} > ${sample}.bg
     """
 }
 
@@ -44,6 +43,7 @@ process bigWig{
 
     script:
     """
-    bedGraphToBigWig ${bedGraph} ${genome} ${sample}.bw
+    bedSort ${bedGraph} ${sample}_sorted.bg &&
+    bedGraphToBigWig ${sample}_sorted.bg ${genome} ${sample}.bw
     """
 }

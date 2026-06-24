@@ -1,0 +1,1 @@
+This folder contains example shell script templates to execute the workflow

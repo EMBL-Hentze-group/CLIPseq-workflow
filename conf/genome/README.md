@@ -1,11 +1,19 @@
 
-## naming convention
+## Required files
 
-Please follow a standard naming convention for the config files here and how the config files are named in the main config file.
+| Param name |      Used by        | Description |
+|------------|---------------------|-------------|
+| fai        | [bedGraph](modules/tracks.nf)| FASTA index (`.fa.fai`) for the genome, used to set chromosome sizes for track generation (see [`samtools faidx`](https://www.htslib.org/doc/samtools-faidx.html)) |
+| rRNA_fa    | [bbduk](modules/bbduk.nf)|  Reference sequences for rRNA filtering |
+| gff3       | [shoji annotation](modules/shoji.nf)| Reference annotation to generate sliding windows (e.g. [GENCODE](https://www.gencodegenes.org/))|
+| STAR_index | [STAR align](modules/star.nf) | Build using [`STAR --runMode genomeGenerate`](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf) against your genome FASTA or FASTA + GTF|
 
-- use either the three letter taxonomy code for the organism or in-case of multiple genome build for the same organism `<three_letter_code>_<genome_build>`
+### Shoji parameters
 
-This config contains genome specific settings such as
-- path to fasta files, indices and annotatition files
-- different attributes in gff3 files such as gene_id, gene_name,...
+> :warning: When using GFF3 files from sources other than GENCODE, shoji paramaters corresponding to gene id, name, type and optionally feature needs to supplied. In [hsa](conf/genome/hsa.config) and [rDNA](conf/genome/hsa.config) configs, for the variable `annotation_params`, the values given to following parameters needs to be changed according to the GFF3 file.
 
+| Param name | Description |
+|------------|-------------|
+|`--gene_id` | Gene id tag in the GFF3 attribute column (default value: gene_id)|
+|`--gene_name` | Gene name tag in the GFF3 attribute column (default value: gene_name)|
+|`--gene_type` | Gene type tag in the GFF3 attribute column (default value: gene_type)|

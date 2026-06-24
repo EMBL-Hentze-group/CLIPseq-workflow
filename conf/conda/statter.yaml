@@ -5,4 +5,4 @@ dependencies:
   - python=3.12.12
   - pip
   - pip:
-      - ngs-statter==1.14.0
+    - ngs-statter==1.20.0

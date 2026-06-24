@@ -1,4 +1,4 @@
 sample,fastq_1,fastq_2
-RBFOX2_IP1,/g/hentze/projects/eCLIP/Benchmark/ENCODE/fastqs/sample_files/sample_10k_RBFOX2_IP1_1_ENCFF930TLO.fastq.gz,/g/hentze/projects/eCLIP/Benchmark/ENCODE/fastqs/sample_files/sample_10k_RBFOX2_IP1_2_ENCFF462CMF.fastq.gz
-RBFOX2_IP2,/g/hentze/projects/eCLIP/Benchmark/ENCODE/fastqs/sample_files/sample_10k_RBFOX2_IP2_1_ENCFF163QEA.fastq.gz,/g/hentze/projects/eCLIP/Benchmark/ENCODE/fastqs/sample_files/sample_10k_RBFOX2_IP2_2_ENCFF942TPA.fastq.gz
-RBFOX2_SMI,/g/hentze/projects/eCLIP/Benchmark/ENCODE/fastqs/sample_files/sample_10k_RBFOX2_SMI_1_ENCFF495WQA.fastq.gz,/g/hentze/projects/eCLIP/Benchmark/ENCODE/fastqs/sample_files/sample_10k_RBFOX2_SMI_2_ENCFF492QZU.fastq.gz
+IP1,/path/to/IP1_1.fastq.gz,/path/to/IP1_2.fastq.gz
+IP2,/path/to/IP2_1.fastq.gz,/path/to/IP2_2.fastq.gz
+SMI,/path/to/SMI_1.fastq.gz,/path/to/SMI_2.fastq.gz
