@@ -183,16 +183,9 @@ NNNNCGCGCGCGNN
 
 ### Running the workflow
 
-Pull the latest version of the workflow before running:
-
-```bash
-nextflow pull <YOUR_REPO_URL>
-```
-
-Replace `<YOUR_REPO_URL>` with the URL of this repository (e.g. `https://github.com/your-org/clip-seq-nf`).
-The examples below use a local clone. To run directly from a remote URL, replace `/path/to/workflow` with `<YOUR_REPO_URL>`.
-
 > :warning: most of the example workflows below assumes that there is a genome assembly config with appropriate paths and parameters in the [genome](./conf/genome/) folder and that this assembly is included in the [nextflow config](./nextflow.config) file
+
+> ℹ️ see [this shell script](#cmdparam) for supplying these files as command-line arguments
 
 #### eCLIP with human genome (hg38) on SLURM using conda
 
@@ -206,6 +199,7 @@ See [this shell script](./scripts/iCLIP_hsa_apptainer.sh)
 
 See [this shell script](./scripts/soniCLIP_hsa_apptainer_shoji.sh)
 
+<a id="cmdparam"></a>
 #### soniCLIP without using a genome config  on SLURM and conda
 
 See [this shell script](./scripts/soniCLIP_custom_conda.sh)
