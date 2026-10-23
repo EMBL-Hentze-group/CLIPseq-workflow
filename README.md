@@ -30,6 +30,8 @@ Starting from raw FASTQ files (or un-demultiplexed iCLIP data), the workflow pro
     - [x] [Kraken2](https://github.com/DerrickWood/kraken2) - run on unmapped reads to detect unexpected organisms
 - **UMI deduplication** *(optional)*
     - [x] [umi_tools](https://umi-tools.readthedocs.io/en/latest/QUICK_START.html) `dedup`
+- **Crosslink Induced Mutation Sites (CIMS)** *(optional)*
+    - [x] CIMS analysis (variant calling) using [GATK Mutect2](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2) (only for R2-CLIP data)
 - **Downstream processing**
     - [x] [shoji](https://github.com/EMBL-Hentze-group/Shoji)
 - **Final statistics report**
@@ -61,6 +63,7 @@ Before running, you will need to prepare and configure paths to:
 | STAR genome index | STAR | Build using [`STAR --runMode genomeGenerate`](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf) against your genome FASTA or FASTA + GTF |
 | GFF3 annotation | shoji | Gene annotation file ([GENCODE](https://www.gencodegenes.org/)). See [this section](#gff3warn) about using annotation files from non GENCODE sources.|
 | Genome FAI | tracks | FASTA index (`.fa.fai`) for the genome, used to set chromosome sizes for track generation (see [`samtools faidx`](https://www.htslib.org/doc/samtools-faidx.html)) |
+| Genome Fasta | Variant caller | Reference genome build to call variants |
 | rRNA FASTA | bbduk | Reference sequences for rRNA filtering |
 | Kraken2 database | Kraken2 | Pre-built Kraken2 database (e.g. from [https://benlangmead.github.io/aws-indexes/k2](https://benlangmead.github.io/aws-indexes/k2)). See **[kraken2](#kraken2) section**  |
 
