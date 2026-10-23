@@ -1,12 +1,6 @@
-process demultiplex{
+process demultiplex {
     label "FLEXBAR"
     label "process_high"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.flexbar
 
     input:
     tuple path(fastq), path(barcode)
@@ -15,7 +9,7 @@ process demultiplex{
     val flexbar_params
 
     output:
-    path("*.fastq.gz"), emit: fastq
+    path ("*.fastq.gz"), emit: fastq
 
     script:
     def params = flexbar_params + " -t ${prefix} -m ${min_read_length}"

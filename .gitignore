@@ -1,6 +1,9 @@
 .nextflow*
+*.log
 trace-*
 dag-*.html
 report-*.html
 timeline-*.html
 work/
+.nf-test/
+test_data/

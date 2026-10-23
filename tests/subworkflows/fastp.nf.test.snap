@@ -1,0 +1,153 @@
+{
+    "Test: FASTP - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "SLBP_IP",
+                        true,
+                        [
+                            "SLBP_IP_test_R1.fq.gz:md5,531a492c08da1724ce3e89ffd7fe14a0",
+                            "SLBP_IP_test_R2.fq.gz:md5,1a94d6181eca725ebf4f23fc46548196"
+                        ]
+                    ],
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_test_R1.fq.gz:md5,f5f947f37775ea4f7cf5b8df96c33f0c",
+                            "SLBP_SMI_test_R2.fq.gz:md5,c984ab8c6b83d2bb8e5bac7a9f8f05c4"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        "SLBP_IP_test_report.json:md5,a8db4a67d04973444617534babce4fac",
+                        "test_stats_multiqc_report.html:md5,26c92ea940cfe79c81d00a0c512dde5c"
+                    ],
+                    [
+                        "SLBP_SMI_test_report.json:md5,ff3c607c198e98f949facae37cbac8b4",
+                        "test_stats_multiqc_report.html:md5,26c92ea940cfe79c81d00a0c512dde5c"
+                    ]
+                ],
+                "2": [
+                    [
+                        "SLBP_IP_test.sig.zip:md5,1f3c07095c29cb4de49a94b672409be1",
+                        "test_k17_compare.npy:md5,e2cd1a50964f9ba3378e0c5f48c2f3a5",
+                        "test_k17_compare.npy.labels.txt:md5,836c93ba91fce3d364156c71b6192dd3",
+                        "test_k17_compare.npy.matrix.pdf:md5,1f0557fc72c6188bf50a5faec04bcabb"
+                    ],
+                    [
+                        "SLBP_SMI_test.sig.zip:md5,bb005fbd45cf188a6d21b3a14fec97a9",
+                        "test_k17_compare.npy:md5,e2cd1a50964f9ba3378e0c5f48c2f3a5",
+                        "test_k17_compare.npy.labels.txt:md5,836c93ba91fce3d364156c71b6192dd3",
+                        "test_k17_compare.npy.matrix.pdf:md5,1f0557fc72c6188bf50a5faec04bcabb"
+                    ]
+                ],
+                "3": [
+                    [
+                        "SLBP_IP_test_R1_fastqc.zip:md5,5e9dde2f7efbfea70bd010d83be2f224",
+                        "SLBP_IP_test_R2_fastqc.zip:md5,6ac29a47172d4a3a68266ddb1ad5a2fa",
+                        "SLBP_IP_test_R1_fastqc.html:md5,58a6aea669cb84508227cc81c351f75e",
+                        "SLBP_IP_test_R2_fastqc.html:md5,ff61428694e282fd9b4bc68657c9d802",
+                        "test_multiqc_report.html:md5,09471914eb3566f961c83f656eedf9c9"
+                    ],
+                    [
+                        "SLBP_SMI_test_R1_fastqc.zip:md5,47506bec91df988f5ed764a6ace4066b",
+                        "SLBP_SMI_test_R2_fastqc.zip:md5,0d20cc871304c401126508b4da5c71ca",
+                        "SLBP_SMI_test_R1_fastqc.html:md5,ca61a61a661f3b9018e6b933c422b76b",
+                        "SLBP_SMI_test_R2_fastqc.html:md5,f948b72b34718852a65ce5ff0319f290",
+                        "test_multiqc_report.html:md5,09471914eb3566f961c83f656eedf9c9"
+                    ]
+                ],
+                "4": [
+                    [
+                        "SLBP_IP",
+                        "test",
+                        "SLBP_IP_test_fq_stats.txt:md5,65c8b13724a4cd53660154f0e00e932d"
+                    ],
+                    [
+                        "SLBP_SMI",
+                        "test",
+                        "SLBP_SMI_test_fq_stats.txt:md5,eff0e736ea8e8b887d20da4d0d6ffc3c"
+                    ]
+                ],
+                "qc": [
+                    [
+                        "SLBP_IP_test_R1_fastqc.zip:md5,5e9dde2f7efbfea70bd010d83be2f224",
+                        "SLBP_IP_test_R2_fastqc.zip:md5,6ac29a47172d4a3a68266ddb1ad5a2fa",
+                        "SLBP_IP_test_R1_fastqc.html:md5,58a6aea669cb84508227cc81c351f75e",
+                        "SLBP_IP_test_R2_fastqc.html:md5,ff61428694e282fd9b4bc68657c9d802",
+                        "test_multiqc_report.html:md5,09471914eb3566f961c83f656eedf9c9"
+                    ],
+                    [
+                        "SLBP_SMI_test_R1_fastqc.zip:md5,47506bec91df988f5ed764a6ace4066b",
+                        "SLBP_SMI_test_R2_fastqc.zip:md5,0d20cc871304c401126508b4da5c71ca",
+                        "SLBP_SMI_test_R1_fastqc.html:md5,ca61a61a661f3b9018e6b933c422b76b",
+                        "SLBP_SMI_test_R2_fastqc.html:md5,f948b72b34718852a65ce5ff0319f290",
+                        "test_multiqc_report.html:md5,09471914eb3566f961c83f656eedf9c9"
+                    ]
+                ],
+                "read_stats": [
+                    [
+                        "SLBP_IP",
+                        "test",
+                        "SLBP_IP_test_fq_stats.txt:md5,65c8b13724a4cd53660154f0e00e932d"
+                    ],
+                    [
+                        "SLBP_SMI",
+                        "test",
+                        "SLBP_SMI_test_fq_stats.txt:md5,eff0e736ea8e8b887d20da4d0d6ffc3c"
+                    ]
+                ],
+                "report": [
+                    [
+                        "SLBP_IP_test_report.json:md5,a8db4a67d04973444617534babce4fac",
+                        "test_stats_multiqc_report.html:md5,26c92ea940cfe79c81d00a0c512dde5c"
+                    ],
+                    [
+                        "SLBP_SMI_test_report.json:md5,ff3c607c198e98f949facae37cbac8b4",
+                        "test_stats_multiqc_report.html:md5,26c92ea940cfe79c81d00a0c512dde5c"
+                    ]
+                ],
+                "sourmash": [
+                    [
+                        "SLBP_IP_test.sig.zip:md5,1f3c07095c29cb4de49a94b672409be1",
+                        "test_k17_compare.npy:md5,e2cd1a50964f9ba3378e0c5f48c2f3a5",
+                        "test_k17_compare.npy.labels.txt:md5,836c93ba91fce3d364156c71b6192dd3",
+                        "test_k17_compare.npy.matrix.pdf:md5,1f0557fc72c6188bf50a5faec04bcabb"
+                    ],
+                    [
+                        "SLBP_SMI_test.sig.zip:md5,bb005fbd45cf188a6d21b3a14fec97a9",
+                        "test_k17_compare.npy:md5,e2cd1a50964f9ba3378e0c5f48c2f3a5",
+                        "test_k17_compare.npy.labels.txt:md5,836c93ba91fce3d364156c71b6192dd3",
+                        "test_k17_compare.npy.matrix.pdf:md5,1f0557fc72c6188bf50a5faec04bcabb"
+                    ]
+                ],
+                "trimmed": [
+                    [
+                        "SLBP_IP",
+                        true,
+                        [
+                            "SLBP_IP_test_R1.fq.gz:md5,531a492c08da1724ce3e89ffd7fe14a0",
+                            "SLBP_IP_test_R2.fq.gz:md5,1a94d6181eca725ebf4f23fc46548196"
+                        ]
+                    ],
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_test_R1.fq.gz:md5,f5f947f37775ea4f7cf5b8df96c33f0c",
+                            "SLBP_SMI_test_R2.fq.gz:md5,c984ab8c6b83d2bb8e5bac7a9f8f05c4"
+                        ]
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T14:24:45.228193436",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

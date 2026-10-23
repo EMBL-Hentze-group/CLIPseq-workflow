@@ -1,0 +1,29 @@
+{
+    "Test: UMI_DEDUP - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        "SLBP_SMI_test.bam:md5,c47b1413c01b353403e7911aa4da35ac",
+                        "SLBP_SMI_test.bam.bai:md5,b019fc85e5a0f9d2abcef36f2049a565"
+                    ]
+                ],
+                "bam": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        "SLBP_SMI_test.bam:md5,c47b1413c01b353403e7911aa4da35ac",
+                        "SLBP_SMI_test.bam.bai:md5,b019fc85e5a0f9d2abcef36f2049a565"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T15:21:19.641832709",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

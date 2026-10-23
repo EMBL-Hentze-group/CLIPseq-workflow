@@ -1,0 +1,27 @@
+nextflow_workflow {
+
+    name "Test Workflow UMI_DEDUP"
+    script "subworkflows/umi_dedup.nf"
+    workflow "UMI_DEDUP"
+
+    test("Test: UMI_DEDUP - Subworkflow") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = tuple("SLBP_SMI", true, params.dedup_bam, params.dedup_bai)
+                input[1] = params.umi_tools.dedup_params
+                input[2] = 'test'
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

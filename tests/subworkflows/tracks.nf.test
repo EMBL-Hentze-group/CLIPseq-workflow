@@ -1,0 +1,28 @@
+nextflow_workflow {
+
+    name "Test Workflow TRACKS"
+    script "subworkflows/tracks.nf"
+    workflow "TRACKS"
+
+    test("Test: TRACKS - Subworkflow") {
+
+        when {
+            
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = tuple("SLBP_SMI", params.sites)
+                input[1] = params.tracks.genome
+                input[2] = params.tracks.params
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

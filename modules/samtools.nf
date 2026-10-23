@@ -1,13 +1,25 @@
+process faidx {
+    label "SAMTOOLS"
+    label "process_low"
+    tag "genome indexing"
+
+    input:
+    path genome
+
+    output:
+    tuple path(genome), path("${genome}.*", arity: '1..2'), emit: indx
+
+    script:
+    """
+    samtools faidx ${genome}
+    """
+}
+
 process sort {
     label "SAMTOOLS"
     label "process_low"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.samtools
     input:
     tuple val(sample), val(paired), path(bam)
     val stage
@@ -26,12 +38,6 @@ process index {
     label "process_low"
     tag "${sample}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.samtools
-
     input:
     tuple val(sample), val(paired), path(bam)
 
@@ -48,14 +54,6 @@ process fastq {
     label "SAMTOOLS"
     label "process_low"
     tag "${sample} ${stage}"
-
-    /*
-    min version requires: 1.21
-
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.samtools
 
     input:
     tuple val(sample), val(paired), path(bam), path(bai)

@@ -1,0 +1,37 @@
+{
+    "Test: Count - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "SLBP_SMI",
+                        [
+                            "SLBP_SMI.bed.gz:md5,1aee11671b36ed314d60a1905ec47d30",
+                            "SLBP_SMI.bed.gz.tbi:md5,a878235b5866ffd3e974c4edd5715340"
+                        ]
+                    ]
+                ],
+                "1": [
+                    "SLBP_SMI.parquet:md5,7623c3979077314872c08c057e489ed1"
+                ],
+                "counts": [
+                    "SLBP_SMI.parquet:md5,7623c3979077314872c08c057e489ed1"
+                ],
+                "sites": [
+                    [
+                        "SLBP_SMI",
+                        [
+                            "SLBP_SMI.bed.gz:md5,1aee11671b36ed314d60a1905ec47d30",
+                            "SLBP_SMI.bed.gz.tbi:md5,a878235b5866ffd3e974c4edd5715340"
+                        ]
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T09:11:54.590422708",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

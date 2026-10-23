@@ -1,0 +1,31 @@
+nextflow_workflow {
+
+    name "Test Workflow SOURMASH"
+    script "subworkflows/sourmash.nf"
+    workflow "SOURMASH"
+
+    test("Test: SOURMASH - Subworkflow") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                in_ch = channel.of(
+                    tuple('SLBP_IP',true,params.eCLIP.ip),
+                    tuple('SLBP_SMI',true,params.eCLIP.smi),
+                )
+                input[0] = in_ch
+                input[1] = params.sourmashCfg
+                input[2] = 'test'
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

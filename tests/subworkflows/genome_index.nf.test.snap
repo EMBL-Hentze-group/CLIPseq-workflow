@@ -1,0 +1,62 @@
+{
+    "Test - Genome Indexing: flat fasta": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "chrM.fa:md5,e53968a38ea72c275952f947158d060b",
+                        [
+                            "chrM.fa.fai:md5,390f712bd48c3a9e3b66ea7b641b7c21"
+                        ],
+                        "chrM.dict:md5,508563f09aa906fe30860bf2da47f18e"
+                    ]
+                ],
+                "indx": [
+                    [
+                        "chrM.fa:md5,e53968a38ea72c275952f947158d060b",
+                        [
+                            "chrM.fa.fai:md5,390f712bd48c3a9e3b66ea7b641b7c21"
+                        ],
+                        "chrM.dict:md5,508563f09aa906fe30860bf2da47f18e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-15T14:26:20.089862173",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    },
+    "Test - Genome Indexing: bgzip fasta": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "chr6_mask_subset.fa.gz:md5,6285b2c1867c54e2b41243acb0380419",
+                        [
+                            "chr6_mask_subset.fa.gz.fai:md5,6ad7eb2592874eedc55248376d18a156",
+                            "chr6_mask_subset.fa.gz.gzi:md5,f9512fbed51e6c176a21f09840920fc9"
+                        ],
+                        "chr6_mask_subset.fa.dict:md5,c0e0f2e5231c392480888eaeb1bd5a5e"
+                    ]
+                ],
+                "indx": [
+                    [
+                        "chr6_mask_subset.fa.gz:md5,6285b2c1867c54e2b41243acb0380419",
+                        [
+                            "chr6_mask_subset.fa.gz.fai:md5,6ad7eb2592874eedc55248376d18a156",
+                            "chr6_mask_subset.fa.gz.gzi:md5,f9512fbed51e6c176a21f09840920fc9"
+                        ],
+                        "chr6_mask_subset.fa.dict:md5,c0e0f2e5231c392480888eaeb1bd5a5e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-15T14:26:05.430031389",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

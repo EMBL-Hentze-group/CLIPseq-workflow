@@ -1,24 +1,17 @@
-
 process kraken2 {
     label "KRAKEN2"
     label "process_highmem"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.kraken2
-
     input:
     tuple val(sample), val(paired), path(fastqs)
-    path(db)
+    path db
     val kraken2_params
     val stage
 
     output:
-    tuple val(sample), val(paired), path("${sample}_${stage}_kraken2_classified*.fq.gz", arity:1..2), emit: classified
-    tuple val(sample), val(paired), path("${sample}_${stage}_kraken2_unclassified*.fq.gz", arity:1..2), emit: unclassified
+    tuple val(sample), val(paired), path("${sample}_${stage}_kraken2_classified*.fq.gz", arity: 1..2), emit: classified
+    tuple val(sample), val(paired), path("${sample}_${stage}_kraken2_unclassified*.fq.gz", arity: 1..2), emit: unclassified
     tuple val(sample), path("${sample}_${stage}_kraken2_report.txt"), emit: report
 
     script:
@@ -30,7 +23,8 @@ process kraken2 {
         class_fq = "--classified-out ${sample}_${stage}_kraken2_classified#.fq"
         unclass_fq = "--unclassified-out ${sample}_${stage}_kraken2_unclassified#.fq"
         inputs = "--paired ${fastqs[0]} ${fastqs[1]}"
-    } else {
+    }
+    else {
         class_fq = "--classified-out ${sample}_${stage}_kraken2_classified.fq"
         unclass_fq = "--unclassified-out ${sample}_${stage}_kraken2_unclassified.fq"
         inputs = " ${fastqs}"
@@ -39,19 +33,12 @@ process kraken2 {
     kraken2 --threads ${task.cpus} --gzip-compressed --db ${db} --report ${out_report} ${kraken2_params} ${class_fq} ${unclass_fq} ${inputs} &&
     gzip *.fq
     """
-
 }
 
-process kraken2Mpa{
-    label "KRAKENTOOLS"
+process kraken2Mpa {
+    label "KRAKEN2"
     label "process_low"
     tag "${sample} ${stage}"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.kraken2
 
     input:
     tuple val(sample), path(report)
@@ -59,7 +46,7 @@ process kraken2Mpa{
     val stage
 
     output:
-    path("${sample}_${stage}_kraken2_mpa.txt"), emit: mpa
+    path ("${sample}_${stage}_kraken2_mpa.txt"), emit: mpa
 
     script:
     """
@@ -67,23 +54,17 @@ process kraken2Mpa{
     """
 }
 
-process combineMpa{
-    label "KRAKENTOOLS"
+process combineMpa {
+    label "KRAKEN2"
     label "process_low"
     tag "${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.kraken2
-
     input:
-    path(mpas)
+    path mpas
     val stage
 
     output:
-    path("${stage}_combined_kraken2_mpa.txt"), emit: mpa_report
+    path ("${stage}_combined_kraken2_mpa.txt"), emit: mpa_report
 
     script:
     def inputs = mpas.join(" ")
@@ -92,25 +73,19 @@ process combineMpa{
     """
 }
 
-process mergeReports{
+process mergeReports {
     label "STATTER"
     label "process_low"
     tag "${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.kraken2
-
     input:
-    path(reports)
-    path(nodes)
-    path(names)
+    path reports
+    path nodes
+    path names
     val stage
 
     output:
-    path("${stage}_merged_kraken2_report.txt"), emit: merged
+    path ("${stage}_merged_kraken2_report.txt"), emit: merged
 
     script:
     def inputs = reports.join(" ")

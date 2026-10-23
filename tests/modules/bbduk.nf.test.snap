@@ -1,0 +1,59 @@
+{
+    "Test: BBDUK - process": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_R1_rRNA_free.fq.gz:md5,1668d089adbc45eb88fc789ffce84f13",
+                            "SLBP_SMI_R2_rRNA_free.fq.gz:md5,7b3e8197e5c4b9f6de78335e95714013"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_R1_rRNA_match.fq.gz:md5,23fd5ec760ce7935e3ad08f0ed6281f6",
+                            "SLBP_SMI_R2_rRNA_match.fq.gz:md5,f6e99f5c98c4531153962b6cacda1a16"
+                        ]
+                    ]
+                ],
+                "2": [
+                    "SLBP_SMI_rRNA_match.stats.txt:md5,73a7dd0b0ee17928ad8dc84be72cb2eb"
+                ],
+                "free": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_R1_rRNA_free.fq.gz:md5,1668d089adbc45eb88fc789ffce84f13",
+                            "SLBP_SMI_R2_rRNA_free.fq.gz:md5,7b3e8197e5c4b9f6de78335e95714013"
+                        ]
+                    ]
+                ],
+                "match": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_R1_rRNA_match.fq.gz:md5,23fd5ec760ce7935e3ad08f0ed6281f6",
+                            "SLBP_SMI_R2_rRNA_match.fq.gz:md5,f6e99f5c98c4531153962b6cacda1a16"
+                        ]
+                    ]
+                ],
+                "stats": [
+                    "SLBP_SMI_rRNA_match.stats.txt:md5,73a7dd0b0ee17928ad8dc84be72cb2eb"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T10:46:42.995141444",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

@@ -8,26 +8,20 @@ workflow CUTADAPT {
     take:
     ch_data
     cut_params
-    sketch_params
-    abund
-    compare_K
+    sourmash_cfg
     stage
 
     main:
     cutadapt = cutadapt_P(ch_data, cut_params, stage)
     fqcs = fastqc(cutadapt.trimmed, stage)
     mqc = multiqc_P(fqcs.zip.collect(), stage)
-    sourmash = SOURMASH(cutadapt.trimmed, sketch_params, abund, compare_K, stage)
+    sourmash = SOURMASH(cutadapt.trimmed, sourmash_cfg, stage)
     stats_read = stats(cutadapt.trimmed, stage)
 
     emit:
     trimmed = cutadapt.trimmed
     report = cutadapt.report
-    // sourmash
-    sourmash = sourmash.signatures|merge(sourmash.comparison)|merge(sourmash.plot)
-    // qc
-    qc = fqcs.zip|merge(fqcs.html)|merge(mqc.multiqc)
-    // read stats
+    sourmash = sourmash.signatures | merge(sourmash.comparison) | merge(sourmash.plot)
+    qc = fqcs.zip | merge(fqcs.html) | merge(mqc.multiqc)
     read_stats = stats_read.stats
 }
-

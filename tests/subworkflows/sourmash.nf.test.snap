@@ -1,0 +1,39 @@
+{
+    "Test: SOURMASH - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    "SLBP_IP_test.sig.zip:md5,e63a14bb659291c21315b76d3ca36ede",
+                    "SLBP_SMI_test.sig.zip:md5,58ed023ce6c93117560874819ffe8102"
+                ],
+                "1": [
+                    [
+                        "test_k17_compare.npy:md5,a8be5a87d1686c420ab6b4cf0840e0b7",
+                        "test_k17_compare.npy.labels.txt:md5,836c93ba91fce3d364156c71b6192dd3"
+                    ]
+                ],
+                "2": [
+                    "test_k17_compare.npy.matrix.pdf:md5,d0500cdfd1c4168c395c025358a80f29"
+                ],
+                "comparison": [
+                    [
+                        "test_k17_compare.npy:md5,a8be5a87d1686c420ab6b4cf0840e0b7",
+                        "test_k17_compare.npy.labels.txt:md5,836c93ba91fce3d364156c71b6192dd3"
+                    ]
+                ],
+                "plot": [
+                    "test_k17_compare.npy.matrix.pdf:md5,d0500cdfd1c4168c395c025358a80f29"
+                ],
+                "signatures": [
+                    "SLBP_IP_test.sig.zip:md5,e63a14bb659291c21315b76d3ca36ede",
+                    "SLBP_SMI_test.sig.zip:md5,58ed023ce6c93117560874819ffe8102"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T13:43:31.915857765",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

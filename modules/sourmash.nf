@@ -6,12 +6,6 @@ process sketch {
     label "process_low"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.sourmash
-
     input:
     tuple val(sample), val(paired), path(fastqs)
     val sketch_params
@@ -34,12 +28,6 @@ process compare {
     label "process_medium"
     tag "${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.sourmash
-
     input:
     path sig
     val K
@@ -59,12 +47,6 @@ process sourmashPlot {
     label "SOURMASH"
     label "process_single"
     tag "${stage}"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.sourmash
 
     input:
     tuple path(npy), path(labels)

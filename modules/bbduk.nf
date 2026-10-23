@@ -3,12 +3,6 @@ process bbduk {
     label "process_high"
     tag "${sample}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.bbmap
-
     input:
     tuple val(sample), val(paired), path(fastqs)
     path ref
@@ -28,7 +22,8 @@ process bbduk {
         output_free = "out=${sample}_R1_rRNA_free.fq.gz out2=${sample}_R2_rRNA_free.fq.gz"
         output_match = "outm=${sample}_R1_rRNA_match.fq.gz outm2=${sample}_R2_rRNA_match.fq.gz"
         inputs = "in=${fastqs[0]} in2=${fastqs[1]}"
-    } else {
+    }
+    else {
         output_free = "out=${sample}_rRNA_free.fq.gz"
         output_match = "outm=${sample}_rRNA_match.fq.gz"
         inputs = "in=${fastqs}"

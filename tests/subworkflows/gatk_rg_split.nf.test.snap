@@ -1,0 +1,27 @@
+{
+    "Test: GATK Preprocess - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "IP",
+                        "IP_split.bam:md5,f99b40dfc3aad54cf79f0c4e12e47759",
+                        "IP_split.bai:md5,1380dc7d2a0b24c6474048c261912c92"
+                    ]
+                ],
+                "bam": [
+                    [
+                        "IP",
+                        "IP_split.bam:md5,f99b40dfc3aad54cf79f0c4e12e47759",
+                        "IP_split.bai:md5,1380dc7d2a0b24c6474048c261912c92"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-15T14:45:32.659795232",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}
