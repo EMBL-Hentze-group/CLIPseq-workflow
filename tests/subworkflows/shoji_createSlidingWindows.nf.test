@@ -1,0 +1,29 @@
+nextflow_workflow {
+
+    name "Test Workflow CREATE_SLIDING_WINDOWS"
+    script "subworkflows/shoji_createSlidingWindows.nf"
+    workflow "CREATE_SLIDING_WINDOWS"
+
+    test("Test: Create Sliding Windows - Subworkflow") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = params.shoji.gff3
+                input[1] = params.shoji.split_intron
+                input[2] = params.shoji.annotation_params
+                input[3] = params.shoji.window
+                input[4] = params.shoji.step
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

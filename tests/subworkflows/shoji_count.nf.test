@@ -1,0 +1,32 @@
+nextflow_workflow {
+
+    name "Test Workflow COUNT"
+    script "subworkflows/shoji_count.nf"
+    workflow "COUNT"
+
+    test("Test: Count - Subworkflow") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = tuple('SLBP_SMI', true, params.bam, params.bai)
+                input[1] = params.shoji.ignore_pcr_duplicates
+                input[2] = params.shoji.primary
+                input[3] = params.shoji.mate
+                input[4] = params.shoji.site
+                input[5] = params.shoji.offset
+                input[6] = params.extract_params
+                input[7] = params.sliding_windows
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

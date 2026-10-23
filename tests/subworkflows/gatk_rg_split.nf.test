@@ -1,0 +1,28 @@
+nextflow_workflow {
+
+    name "Test Workflow GATK_RG_SPLIT"
+    script "subworkflows/gatk_rg_split.nf"
+    workflow "GATK_RG_SPLIT"
+
+    test("Test: GATK Preprocess - Subworkflow") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = tuple("IP", false, params.cims.bam, params.cims.bai)
+                input[1] = tuple(params.cims.fa, tuple(params.cims.fai, params.cims.gzi), params.cims.dict)
+                input[2] = params.AddOrReplaceReadGroups.run_params
+                input[3] = params.SplitNCigarReads.run_params
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

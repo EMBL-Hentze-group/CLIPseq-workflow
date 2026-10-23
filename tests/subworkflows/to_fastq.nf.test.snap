@@ -1,0 +1,73 @@
+{
+    "Test: TOFASTQ - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_mapped_R1.fq.gz:md5,08b810b496e1602c486c97490a7a05ad",
+                            "SLBP_SMI_mapped_R2.fq.gz:md5,6f0ccd3909b55f727ae9cb29f91d4ade"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_unmapped_R1.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "SLBP_SMI_unmapped_R2.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "2": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_multimapped_R1.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "SLBP_SMI_multimapped_R2.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "mapped": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_mapped_R1.fq.gz:md5,08b810b496e1602c486c97490a7a05ad",
+                            "SLBP_SMI_mapped_R2.fq.gz:md5,6f0ccd3909b55f727ae9cb29f91d4ade"
+                        ]
+                    ]
+                ],
+                "multimapped": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_multimapped_R1.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "SLBP_SMI_multimapped_R2.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "unmapped": [
+                    [
+                        "SLBP_SMI",
+                        true,
+                        [
+                            "SLBP_SMI_unmapped_R1.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "SLBP_SMI_unmapped_R2.fq.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T15:24:14.960396179",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

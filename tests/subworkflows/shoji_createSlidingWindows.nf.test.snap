@@ -1,0 +1,72 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "gencode.v42.chr6.gff3.bed.gz:md5,c207e18ffbe3a7ac5ad893614767dab1",
+                        "gencode.v42.chr6.gff3.bed.gz.tbi:md5,ee00e5cd71a7c7cacc69de19218923ca"
+                    ]
+                ],
+                "1": [
+                    [
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz:md5,1f791500b63778d5f56dde09beffbef5",
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz.tbi:md5,174e28b57e34e483113d8ca412398c69"
+                    ]
+                ],
+                "annotation": [
+                    [
+                        "gencode.v42.chr6.gff3.bed.gz:md5,c207e18ffbe3a7ac5ad893614767dab1",
+                        "gencode.v42.chr6.gff3.bed.gz.tbi:md5,ee00e5cd71a7c7cacc69de19218923ca"
+                    ]
+                ],
+                "sliding_windows": [
+                    [
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz:md5,1f791500b63778d5f56dde09beffbef5",
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz.tbi:md5,174e28b57e34e483113d8ca412398c69"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T08:33:07.883439565",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    },
+    "Test: Create Sliding Windows - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "gencode.v42.chr6.gff3.bed.gz:md5,c207e18ffbe3a7ac5ad893614767dab1",
+                        "gencode.v42.chr6.gff3.bed.gz.tbi:md5,ee00e5cd71a7c7cacc69de19218923ca"
+                    ]
+                ],
+                "1": [
+                    [
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz:md5,1f791500b63778d5f56dde09beffbef5",
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz.tbi:md5,174e28b57e34e483113d8ca412398c69"
+                    ]
+                ],
+                "annotation": [
+                    [
+                        "gencode.v42.chr6.gff3.bed.gz:md5,c207e18ffbe3a7ac5ad893614767dab1",
+                        "gencode.v42.chr6.gff3.bed.gz.tbi:md5,ee00e5cd71a7c7cacc69de19218923ca"
+                    ]
+                ],
+                "sliding_windows": [
+                    [
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz:md5,1f791500b63778d5f56dde09beffbef5",
+                        "gencode.v42.chr6.gff3.bed_w100_s20.bed.gz.tbi:md5,174e28b57e34e483113d8ca412398c69"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T10:24:02.494020682",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

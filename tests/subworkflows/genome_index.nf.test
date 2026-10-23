@@ -1,0 +1,47 @@
+nextflow_workflow {
+
+    name "Test Workflow GenomeIndex"
+    script "subworkflows/genome_index.nf"
+    workflow "GenomeIndex"
+
+    test("Test - Genome Indexing: bgzip fasta") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = params.gi.fa_gz
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            def output = workflow.out.indx[0]
+            assert output.size() == 3 && output[1].size() == 2 , "Output tuple must have 3 elements, but got ${output.size()}, and second element must have 2 elements, but got ${output[1].size()}" // 3 elements for bgzip, second element is a tuple of 2 indices
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+    test("Test - Genome Indexing: flat fasta") {
+
+        when {
+            workflow {
+                """
+                input[0] = params.gi.fa
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            def output = workflow.out.indx[0]
+            assert output.size() == 3 && output[1].size() == 1 , "Output tuple must have 3 elements, but got ${output.size()}, and second element must have 1 element, but got ${output[1].size()}" // 3 elements for flat fasta, second element is a tuple of 1 index
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+
+}

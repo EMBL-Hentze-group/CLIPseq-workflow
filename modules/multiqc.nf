@@ -3,12 +3,6 @@ process multiqc {
     label "process_single"
     tag "${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.qc
-
     input:
     path zip
     val stage

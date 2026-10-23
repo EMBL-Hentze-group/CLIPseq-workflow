@@ -3,12 +3,6 @@ process fastp {
     label "process_low"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.trim
-
     input:
     tuple val(sample), val(paired), path(fastqs)
     path adapter_file
@@ -17,7 +11,7 @@ process fastp {
 
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
-    path("${sample}_${stage}_report.json"), emit: report
+    path ("${sample}_${stage}_report.json"), emit: report
     tuple val(sample), val(stage), path("${sample}_${stage}_report.json"), emit: stats
 
     script:
@@ -27,43 +21,35 @@ process fastp {
     if (paired) {
         outputs = " -o ${sample}_${stage}_R1.fq.gz -O ${sample}_${stage}_R2.fq.gz"
         inputs = " -i ${fastqs[0]}  -I ${fastqs[1]}"
-    } else {
+    }
+    else {
         outputs = " -o ${sample}_${stage}.fq.gz"
         inputs = " -i ${fastqs}"
     }
     if (adapter_file != null || adapter_file != "") {
-        trim_params = " --adapter_fasta "+ adapter_file + " " + trim_params
+        trim_params = " --adapter_fasta " + adapter_file + " " + trim_params
     }
     """
     fastp --thread ${task.cpus} ${trim_params} -j ${json} ${outputs} ${inputs}
     """
 }
 
-process trim_demultiplex{
+process trim_demultiplex {
     label "FASTP"
     label "process_high"
-    /*
-    
-    trim reads before demultiplexing using umi_tools
-    umi_tools will fail if the reads are shorter than the barcode pattern
 
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.trim
-    
     input:
     tuple path(fastq), path(barcode)
     val min_read_length
 
     output:
     tuple path("${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}_trimmed.fastq.gz"), path(barcode), emit: fastq
-    path("${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}_demultiplex_report.json"), emit: report
+    path ("${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}_demultiplex_report.json"), emit: report
 
     script:
     def base = fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)
-    def output = base+"_trimmed.fastq.gz"
-    def json = base+"_demultiplex_report.json"
+    def output = base + "_trimmed.fastq.gz"
+    def json = base + "_demultiplex_report.json"
     """
     fastp --thread ${task.cpus} -l ${min_read_length} -G -Q -A -n 50 -o ${output} -j ${json} -i ${fastq}
     """

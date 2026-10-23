@@ -4,12 +4,6 @@ process dedup {
     // TODO fix this later
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.umi_tools
-
     input:
     tuple val(sample), val(paired), path(bam), path(index)
     val dedup_params
@@ -25,42 +19,30 @@ process dedup {
     """
 }
 
-process UMI_extract{
+process UMI_extract {
     label "UMITOOLS"
     label "process_single"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.umi_tools
 
     input:
     tuple path(fastq), path(barcode)
     val pattern
-    
+
     output:
     tuple path("${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}_demux.fastq.gz"), path(barcode), emit: fastq
-    path("${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}.log"), emit: log
+    path ("${fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)}.log"), emit: log
 
     script:
     def base = fastq.getBaseName(fastq.name.endsWith('.gz') ? 2 : 1)
-    def output = base+"_demux.fastq.gz"
+    def output = base + "_demux.fastq.gz"
     """
     umi_tools extract -p ${pattern} -I ${fastq} -E ${base}.log -S ${output}
     """
 }
 
-process R2CLIP_extract{
+process R2CLIP_extract {
     label "UMITOOLS"
     label "process_single"
     tag "${sample}"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.umi_tools
 
     input:
     tuple val(sample), path(fastq_1), path(fastq_2)
@@ -68,8 +50,7 @@ process R2CLIP_extract{
 
     output:
     tuple val(sample), path("${sample}.fq.gz"), emit: fastq
-    path("${sample}.log"), emit: log
-
+    path ("${sample}.log"), emit: log
 
     script:
     """

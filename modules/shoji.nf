@@ -2,13 +2,6 @@ process annotation {
     label "SHOJI"
     label "process_low"
     tag "shoji annotation"
-    
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.shoji
 
     input:
     path gff3
@@ -30,14 +23,9 @@ process createSlidingWindows {
     tag "shoji createSlidingWindows"
     label "process_medium"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.shoji
-
     input:
-    path(annotation, arity: 1..2) // expect either the annotation file alone or with its index
+    path annotation, arity: 1..2
+    // expect either the annotation file alone or with its index
     val window
     val step
 
@@ -45,7 +33,7 @@ process createSlidingWindows {
     path ("${annotation[0].getBaseName()}_w${window}_s${step}.bed.gz*"), emit: sliding_windows
 
     script:
-    
+
     """
     shoji createSlidingWindows -c ${task.cpus} --tabix -w ${window} -s ${step} -a ${annotation[0]} -o ${annotation[0].getBaseName()}_w${window}_s${step}.bed.gz
     """
@@ -55,12 +43,6 @@ process extract {
     label "SHOJI"
     label "process_medium"
     tag "shoji extract ${sample}"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.shoji
 
     input:
     tuple val(sample), val(paired), path(bam), path(index)
@@ -88,15 +70,10 @@ process count {
     tag "shoji count ${sample}"
     label "process_medium"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.shoji
-
     input:
-    tuple val(sample), path(sites, arity: 1..2) // expect either the sites file alone or with its index
-    path (sliding_windows, arity: 1..2) // expect either the sliding window file alone or with its index
+    tuple val(sample), path(sites, arity: 1..2)
+    // expect either the sites file alone or with its index
+    path sliding_windows, arity: 1..2
 
     output:
     path ("${sample}.parquet"), emit: counts
@@ -111,12 +88,6 @@ process createMatrix {
     label "SHOJI"
     tag "shoji createMatrix"
     label "process_medium"
-
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.shoji
 
     input:
     path (counts), name: "counts/*"

@@ -20,7 +20,7 @@ workflow QC {
 Wrapper workflow for QC to merge QC results at different stages
 so that final channels are consistent across different workflows
 */
-workflow QC_WRAPPER{
+workflow QC_WRAPPER {
     take:
     ch_data
     stage
@@ -29,5 +29,5 @@ workflow QC_WRAPPER{
     qcw = QC(ch_data, stage)
 
     emit:
-    qc = qcw.zip|merge(qcw.html)|merge(qcw.multiqc)
+    qc = qcw.zip | merge(qcw.html) | merge(qcw.multiqc)
 }

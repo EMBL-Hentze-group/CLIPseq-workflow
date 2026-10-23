@@ -1,0 +1,51 @@
+{
+    "Test: Mutect2 - Subworkflow : no PCR duplicate marking": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "IP",
+                        "IP_split.bam:md5,f99b40dfc3aad54cf79f0c4e12e47759",
+                        "IP_split.bai:md5,1380dc7d2a0b24c6474048c261912c92"
+                    ]
+                ],
+                "1": [
+                    [
+                        "IP",
+                        "IP.mutect2_filtered.vcf.gz:md5,dbce20bce82208072e8e4bb06e2cf917",
+                        "IP.mutect2_filtered.vcf.gz.tbi:md5,4c5c8f876f22ac87dee27cde4bbbcd6d"
+                    ],
+                    [
+                        "IP.mutect2_raw.vcf.gz:md5,e7d14f48bf2926303d3e993783ed48cd",
+                        "IP.mutect2_raw.vcf.gz.tbi:md5,7468557471d710f427b627301e0374fb",
+                        "IP.mutect2_raw.vcf.gz.stats:md5,bf656dbf57a460e4305e6249342de0f8"
+                    ]
+                ],
+                "bam": [
+                    [
+                        "IP",
+                        "IP_split.bam:md5,f99b40dfc3aad54cf79f0c4e12e47759",
+                        "IP_split.bai:md5,1380dc7d2a0b24c6474048c261912c92"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        "IP",
+                        "IP.mutect2_filtered.vcf.gz:md5,dbce20bce82208072e8e4bb06e2cf917",
+                        "IP.mutect2_filtered.vcf.gz.tbi:md5,4c5c8f876f22ac87dee27cde4bbbcd6d"
+                    ],
+                    [
+                        "IP.mutect2_raw.vcf.gz:md5,e7d14f48bf2926303d3e993783ed48cd",
+                        "IP.mutect2_raw.vcf.gz.tbi:md5,7468557471d710f427b627301e0374fb",
+                        "IP.mutect2_raw.vcf.gz.stats:md5,bf656dbf57a460e4305e6249342de0f8"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-10-15T15:05:10.816583475",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

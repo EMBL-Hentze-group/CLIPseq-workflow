@@ -1,5 +1,5 @@
 include {
-    extract
+    extract ;
     count as count_P
 } from '../modules/shoji.nf'
 

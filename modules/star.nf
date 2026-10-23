@@ -3,12 +3,6 @@ process starAlign {
     label "process_high"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.star
-
     input:
     tuple val(sample), val(paired), path(reads)
     path genomeDir
@@ -36,12 +30,6 @@ process starAlign2Pass {
     label "process_high"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.star
-    
     input:
     tuple val(sample), val(paired), path(reads)
     path genomeDir

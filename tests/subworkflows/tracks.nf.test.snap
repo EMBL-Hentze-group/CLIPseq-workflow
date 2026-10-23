@@ -1,0 +1,19 @@
+{
+    "Test: TRACKS - Subworkflow": {
+        "content": [
+            {
+                "0": [
+                    "SLBP_SMI.bw:md5,4cb59ea123d73aa71e88d452519b5c9d"
+                ],
+                "bw": [
+                    "SLBP_SMI.bw:md5,4cb59ea123d73aa71e88d452519b5c9d"
+                ]
+            }
+        ],
+        "timestamp": "2026-10-14T16:12:31.431138508",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
+        }
+    }
+}

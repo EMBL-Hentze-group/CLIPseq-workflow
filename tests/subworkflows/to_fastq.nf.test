@@ -1,0 +1,24 @@
+nextflow_workflow {
+
+    name "Test Workflow TOFASTQ"
+    script "subworkflows/to_fastq.nf"
+    workflow "TOFASTQ"
+
+    test("Test: TOFASTQ - Subworkflow") {
+
+        when {
+            workflow {
+                """
+                input[0] = tuple("SLBP_SMI", true, params.dedup_bam, params.dedup_bai)
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

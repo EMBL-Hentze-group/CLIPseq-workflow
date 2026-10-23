@@ -1,0 +1,31 @@
+nextflow_workflow {
+
+    name "Test Workflow Mutect2Variants"
+    script "subworkflows/gatk_mutec2.nf"
+    workflow "Mutect2Variants"
+
+    test("Test: Mutect2 - Subworkflow : no PCR duplicate marking") {
+
+        when {
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = tuple("IP", false, params.cims.bam, params.cims.bai)
+                input[1] = tuple(params.cims.fa, tuple(params.cims.fai, params.cims.gzi), params.cims.dict)
+                input[2] = params.AddOrReplaceReadGroups.run_params
+                input[3] = params.SplitNCigarReads.run_params
+                input[4] = params.Mutect2.run_params
+                input[5] = params.LearnReadOrientationModel.run_params
+                input[6] = params.FilterMutectCalls.run_params
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

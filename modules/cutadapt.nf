@@ -3,12 +3,6 @@ process cutadapt {
     label "process_low"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.trim
-    
     input:
     tuple val(sample), val(paired), path(fastqs)
     val cut_params
@@ -16,7 +10,7 @@ process cutadapt {
 
     output:
     tuple val(sample), val(paired), path("${sample}_${stage}*fq.gz"), emit: trimmed
-    path("${sample}_${stage}_report.json"), emit: report
+    path ("${sample}_${stage}_report.json"), emit: report
     tuple val(sample), val(stage), path("${sample}_${stage}_report.json"), emit: stats
 
     script:
@@ -26,7 +20,8 @@ process cutadapt {
     if (paired) {
         outputs = " -o ${sample}_${stage}_R1.fq.gz -p ${sample}_${stage}_R2.fq.gz"
         inputs = "${fastqs[0]} ${fastqs[1]}"
-    } else {
+    }
+    else {
         outputs = " -o ${sample}_${stage}_fq.gz"
         inputs = "${fastqs}"
     }

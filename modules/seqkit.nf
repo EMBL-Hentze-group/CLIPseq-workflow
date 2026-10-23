@@ -3,12 +3,6 @@ process stats {
     label "process_low"
     tag "${sample} ${stage}"
 
-    /*
-    see conf/conda/apptainer.config for singularity params and
-        conf/conda/conda.config for conda params
-    */
-    // conda params.conda.seqkit
-
     input:
     tuple val(sample), val(paired), path(fastqs)
     val stage
@@ -21,7 +15,8 @@ process stats {
     def inputs
     if (paired) {
         inputs = "${fastqs[0]} ${fastqs[1]}"
-    } else {
+    }
+    else {
         inputs = "${fastqs}"
     }
     """
