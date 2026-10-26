@@ -214,8 +214,10 @@ workflow {
             params.FilterMutectCalls.run_params,
         )
     }
-    else if (!params.r2_clip && params.call_variants) {
-        log.warn("Variant calling was requested, but this workflow support variant calling only for R2-CLIP data. Skipping variant calling.")
+    else {
+        if (!params.r2_clip && params.call_variants) {
+            log.warn("Variant calling was requested, but this workflow support variant calling only for R2-CLIP data. Skipping variant calling.")
+        }
         ch_variants = [:]
         ch_variants.bam = channel.empty()
         ch_variants.vcf = channel.empty()
