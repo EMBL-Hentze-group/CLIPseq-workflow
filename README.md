@@ -41,8 +41,10 @@ Starting from raw FASTQ files (or un-demultiplexed iCLIP data), the workflow pro
 
 - **Java 11+** (required by Nextflow)
 - **[Nextflow](https://www.nextflow.io/docs/latest/install.html)** - tested versions:
+  
   - [`25.04.6`](https://github.com/nextflow-io/nextflow/releases/tag/v25.04.6)
   - [`25.10.1`](https://github.com/nextflow-io/nextflow/releases/tag/v25.10.1)
+  - [`26.04.4`](https://github.com/nextflow-io/nextflow/releases/tag/v26.04.4)
 - One of the following for software environments:
   - **[Apptainer](https://apptainer.org/)** (formerly Singularity) - recommended for HPC, see [apptainer configs](conf/containers/apptainer.config)
   - **[Conda](https://conda.io)** / **[Mamba](https://mamba.readthedocs.io)** - see [conda configs](conf/conda/)
@@ -229,6 +231,9 @@ Given below is an example output directory structure from this pipeline.
 | | unmapped_fq| |un-mapped reads in fq format|
 |Kraken2| | |Kraken 2 output directory|
 | | contamination_check| |Kraken2 classification files and contamination reports|
+|Variants| | |CIMS (variant calling) output directory|
+| | bam| |Normalized BAM files for variant calling|
+| | vcf| |Variant Calling Format files with variants/CIMS|
 |QC| | |QC files: fastqc and multiqc files|
 | | raw| |raw data QC|
 | | rRNA_trim| |QC after rRNA read removal|
