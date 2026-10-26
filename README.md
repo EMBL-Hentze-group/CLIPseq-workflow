@@ -1,6 +1,6 @@
 # CLIP-seq Workflow
 
-**version**: 1.0.1
+**version**: 1.1.0
 
 A [Nextflow](https://nextflow.io) workflow for end-to-end processing of CLIP-seq data, supporting multiple CLIP protocols.
 
